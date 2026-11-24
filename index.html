@@ -1,4 +1,4 @@
-<!doctype html><html lang="he"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>פינה עליונה</title><meta name="theme-color" content="#08131f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="פינה עליונה"><style>:root{color-scheme:light;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>פינה עליונה</title>
+<!doctype html><html lang="he"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover"><title>פינה עליונה</title><meta name="theme-color" content="#08131f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="פינה עליונה"><style>:root{color-scheme:light;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>פינה עליונה</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@500;700&family=Rubik:wght@800;900&display=swap">
 <style>
@@ -13,6 +13,7 @@
 html,body{height:100%}
 body{margin:0;background:var(--night);color:var(--chalk);font-family:var(--body);overflow:hidden;overscroll-behavior:none;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation}
 button{font-family:inherit;touch-action:manipulation}
 #stage{position:relative;height:100%;max-width:520px;margin:0 auto;overflow:hidden;background:var(--night)}
 #c{display:block;width:100%;height:100%;touch-action:none}
@@ -210,8 +211,7 @@ input[type=range]{width:100%;accent-color:var(--amber);height:28px}
     <h1>פינה עליונה</h1>
     <p class="desc" id="verLb" style="margin:0;font-size:11px;opacity:.6">גרסה 1.0</p>
     <div id="plBox" style="text-align:center;margin:4px 0 2px">
-      <p id="plCnt" hidden style="margin:0 0 3px;font:800 16px/1.3 var(--display);color:var(--amber);text-shadow:0 0 14px rgba(255,184,31,.35)"></p>
-      <p style="margin:0;font-size:12px;line-height:1.45;color:var(--chalk);opacity:.88">תודה רבה לכל אחד ואחד מכם 💛<br>אנחנו מעריכים כל שחקן ושחקנית שהצטרפו</p>
+      <p id="plCnt" hidden style="margin:0;font:800 16px/1.3 var(--display);color:var(--amber);text-shadow:0 0 14px rgba(255,184,31,.35)"></p>
     </div>
     <div class="coins"><span class="coin"></span><b class="cv">0</b></div>
     <button class="btn" id="daily" type="button" hidden></button>
@@ -400,6 +400,18 @@ input[type=range]{width:100%;accent-color:var(--amber);height:28px}
   </div></section>
 </div>
 
+<div id="thxOv" role="dialog" aria-modal="true" aria-label="תודה" style="position:fixed;inset:0;z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,9,16,.82);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)" dir="rtl" lang="he">
+  <div style="position:relative;width:100%;max-width:340px;text-align:center;padding:30px 22px 24px;border-radius:24px;background:linear-gradient(160deg,#17314d,#0c1a2c);border:1px solid rgba(255,184,31,.45);box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(255,184,31,.18);animation:thxIn .45s cubic-bezier(.2,1.3,.4,1)">
+    <button id="thxX" type="button" aria-label="סגור" style="z-index:5;position:absolute;top:10px;left:10px;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:22px;line-height:1;cursor:pointer">✕</button>
+    <div style="pointer-events:none;font-size:64px;line-height:1;animation:thxB 1.2s ease-in-out infinite">❤️</div>
+    <h2 style="margin:12px 0 6px;font:900 34px/1.1 var(--display);color:var(--amber)">תודה רבה!</h2>
+    <p style="margin:0 0 4px;font-size:18px;line-height:1.5;color:var(--chalk)">לכל אחד ואחד מכם</p>
+    <p style="margin:0;font-size:15px;line-height:1.5;color:var(--chalk);opacity:.85">אנחנו מעריכים כל שחקן ושחקנית שהצטרפו</p>
+    <p id="thxCnt" hidden style="margin:14px 0 0;font:800 17px/1.3 var(--display);color:var(--amber)"></p>
+    <button id="thxGo" type="button" style="margin-top:20px;width:100%;padding:14px;border:0;border-radius:14px;background:var(--amber);color:var(--ink);font:800 18px var(--display);cursor:pointer">יאללה, משחקים!</button>
+  </div>
+</div>
+<style>@keyframes thxIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}@keyframes thxB{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}</style>
 <script>
 (function(){
 'use strict';
@@ -2990,14 +3002,18 @@ $('setBack').addEventListener('click',function(){go(backTo);});
   var BASE='https://countapi.mileshilliard.com/api/v1',KEY='pina-elyona-players-v1',LIVE=['pina-games.github.io','elayamsalem11-max.github.io'],last=0;
   function fmt(n){var s=n<10?0:n<100?10:n<1000?50:n<100000?500:n<1000000?50000:500000;return s?Math.floor(n/s)*s:0;}
   window.__plFmt=fmt;
-  function show(n){var f=fmt(n),el=$('plCnt');if(!el)return;if(!f){el.hidden=true;return;}el.hidden=false;
+  function show(n){var f=fmt(n),el=$('plCnt'),el2=$('thxCnt');if(!el)return;if(!f){el.hidden=true;if(el2)el2.hidden=true;return;}el.hidden=false;if(el2)el2.hidden=false;
     var t0=null,dur=1200;function st(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/dur),v=p>=1?f:Math.max(1,Math.floor(f*(1-Math.pow(1-p,3))));
-      el.textContent='🏟️ כבר מעל '+v.toLocaleString('he-IL')+' שחקנים';if(p<1)requestAnimationFrame(st);}
+      var tx='🏟️ כבר מעל '+v.toLocaleString('he-IL')+' שחקנים';el.textContent=tx;if(el2)el2.textContent=tx;if(p<1)requestAnimationFrame(st);}
     requestAnimationFrame(st);}
   function api(p){return fetch(BASE+p,{cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json();});}
   function flag(v){try{if(v===undefined)return localStorage.getItem('pe_cnt');localStorage.setItem('pe_cnt',v);}catch(e){}return null;}
   function run(){last=Date.now();var hit=LIVE.indexOf(location.hostname)>=0&&STORE_OK&&flag()!=='1',p=(hit?'/hit/':'/get/')+KEY;
     api(p).then(function(j){if(hit)flag('1');var n=parseInt(j&&j.value,10);if(isFinite(n))show(n);}).catch(function(){});}
+  function closeThx(){var o=$('thxOv');if(o)o.hidden=true;}
+  $('thxX').addEventListener('click',closeThx);$('thxGo').addEventListener('click',closeThx);
+  $('thxOv').addEventListener('click',function(e){if(e.target===this)closeThx();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeThx();});
   setTimeout(run,700);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&Date.now()-last>600000)run();});
 })();
