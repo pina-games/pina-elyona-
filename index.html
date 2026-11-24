@@ -1,4 +1,4 @@
-<title>פינה עליונה</title>
+<!doctype html><html lang="he"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>פינה עליונה</title><meta name="theme-color" content="#08131f"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="פינה עליונה"><style>:root{color-scheme:light;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>פינה עליונה</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@500;700&family=Rubik:wght@800;900&display=swap">
 <style>
@@ -209,6 +209,10 @@ input[type=range]{width:100%;accent-color:var(--amber);height:28px}
     <p class="sub">בעיטות חופשיות</p>
     <h1>פינה עליונה</h1>
     <p class="desc" id="verLb" style="margin:0;font-size:11px;opacity:.6">גרסה 1.0</p>
+    <div id="plBox" style="text-align:center;margin:4px 0 2px">
+      <p id="plCnt" hidden style="margin:0 0 3px;font:800 16px/1.3 var(--display);color:var(--amber);text-shadow:0 0 14px rgba(255,184,31,.35)"></p>
+      <p style="margin:0;font-size:12px;line-height:1.45;color:var(--chalk);opacity:.88">תודה רבה לכל אחד ואחד מכם 💛<br>אנחנו מעריכים כל שחקן ושחקנית שהצטרפו</p>
+    </div>
     <div class="coins"><span class="coin"></span><b class="cv">0</b></div>
     <button class="btn" id="daily" type="button" hidden></button>
     <button class="mode" type="button" id="mgBtn"><b>קריירת מאמן</b><span id="mgSub">ליגת העל הישראלית: סגל, מחזורים, העברות וגביע</span></button>
@@ -2982,6 +2986,21 @@ $('setBack').addEventListener('click',function(){go(backTo);});
 
 /* ================= boot ================= */
 
+(function(){
+  var BASE='https://countapi.mileshilliard.com/api/v1',KEY='pina-elyona-players-v1',LIVE=['pina-games.github.io','elayamsalem11-max.github.io'],last=0;
+  function fmt(n){var s=n<10?0:n<100?10:n<1000?50:n<100000?500:n<1000000?50000:500000;return s?Math.floor(n/s)*s:0;}
+  window.__plFmt=fmt;
+  function show(n){var f=fmt(n),el=$('plCnt');if(!el)return;if(!f){el.hidden=true;return;}el.hidden=false;
+    var t0=null,dur=1200;function st(ts){if(t0===null)t0=ts;var p=Math.min(1,(ts-t0)/dur),v=p>=1?f:Math.max(1,Math.floor(f*(1-Math.pow(1-p,3))));
+      el.textContent='🏟️ כבר מעל '+v.toLocaleString('he-IL')+' שחקנים';if(p<1)requestAnimationFrame(st);}
+    requestAnimationFrame(st);}
+  function api(p){return fetch(BASE+p,{cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json();});}
+  function flag(v){try{if(v===undefined)return localStorage.getItem('pe_cnt');localStorage.setItem('pe_cnt',v);}catch(e){}return null;}
+  function run(){last=Date.now();var hit=LIVE.indexOf(location.hostname)>=0&&STORE_OK&&flag()!=='1',p=(hit?'/hit/':'/get/')+KEY;
+    api(p).then(function(j){if(hit)flag('1');var n=parseInt(j&&j.value,10);if(isFinite(n))show(n);}).catch(function(){});}
+  setTimeout(run,700);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&Date.now()-last>600000)run();});
+})();
 (function(){var tx=$('bkTx'),ms=$('bkMsg');
 $('bkEx').addEventListener('click',function(){try{var c=btoa(unescape(encodeURIComponent(JSON.stringify(D))));tx.value=c;tx.select();var ok=false;try{navigator.clipboard.writeText(c).then(function(){ms.textContent='הקוד הועתק. הדבק אותו בקישור החדש תחת ייבוא.';},function(){ms.textContent='סמן והעתק את הקוד ידנית.';});ok=true;}catch(e){}if(!ok)ms.textContent='סמן והעתק את הקוד ידנית.';}catch(e){ms.textContent='הייצוא נכשל.';}});
 $('bkIm').addEventListener('click',function(){try{var o=JSON.parse(decodeURIComponent(escape(atob(tx.value.trim()))));if(!o||typeof o!=='object')throw 0;stWrite(JSON.stringify(o));ms.textContent='הייבוא הצליח. טוען מחדש...';setTimeout(function(){location.reload();},600);}catch(e){ms.textContent='הקוד לא תקין.';}});})();
@@ -3043,3 +3062,4 @@ function frame(now){
 requestAnimationFrame(frame);
 })();
 </script>
+</body></html>
