@@ -1419,9 +1419,16 @@ var TEAMS=[
  ['הפועל ירושלים',65,6,'jm'],['עירוני קרית שמונה',64,3,'ks'],['מכבי פתח תקוה',63,4,'pt'],['הפועל פתח תקוה',62,4,'pt'],
  ['הפועל רמת גן',60,3,'rg'],['עירוני טבריה',58,2,'tb'],
  ['הפועל רעננה',57,2,'x14'],['מכבי אחי נצרת',56,3,'x15'],['הפועל עפולה',56,2,'x16'],['מ.ס. אשדוד',55,2,'x17'],['מכבי יפו',55,2,'x18'],['מ.ס. קריית ים',54,2,'x19'],['מכבי בני ריינה',54,2,'x20'],['בני יהודה תל אביב',53,2,'x21'],['הפועל כפר שלם',53,2,'x22'],['מ.ס. כפר קאסם',52,2,'x23'],['הפועל עכו',52,2,'x24'],['מכבי קריית גת',51,1,'x25'],['הפועל ראשון לציון',50,1,'x26'],['הפועל כפר סבא',50,1,'x27']];
-function TT(i){if(i>=100){var o=D.mgr&&D.mgr.eu&&D.mgr.eu.opps[i-100];return [o?o.n:'?',0,0,'eu'+i];}return TEAMS[i];}
+function TT(i){if(i>=200)return [CLX[i-200][0],1,1,'cl'+i];if(i>=100){var o=D.mgr&&D.mgr.eu&&D.mgr.eu.opps[i-100];return [o?o.n:'?',0,0,'eu'+i];}return TEAMS[i];}
 var PLAB={GK:'שוער',DF:'מגן',MF:'קשר',FW:'חלוץ'},POSORD={GK:0,DF:1,MF:2,FW:3};
 var CUPN=['שמינית גמר','רבע גמר','חצי גמר','גמר'];
+var CUPN7=['סיבוב ז׳','סיבוב ח׳','שלב ה־32','שמינית גמר','רבע גמר','חצי גמר','גמר'];
+var CLX=[['הפועל חדרה',52],['הפועל נוף הגליל',51],['מכבי הרצליה',50],['עירוני מודיעין',52],
+ ['מ.ס. טירה',47],['הפועל באקה',46],['הפועל בית שאן',45],['בית"ר תל אביב רמלה',46],['מכבי אור עקיבא',45],['הפועל עירוני כרמיאל',48],['הפועל מגדל העמק',48],['הפועל טירת הכרמל',46],['הפועל אום אל פחם',47],['עירוני נשר',47],['מכבי עטא ביאליק',45],['מכבי נווה שאנן אלדד',44],['הפועל פרדס חנה',45],['צעירי אום אל פחם',44],['צעירי טמרה',44],
+ ['בית"ר יבנה',48],['מ.ס. דימונה',46],['מכבי סקציה נס ציונה',46],['נורדיה ירושלים',46],['צעירי טירה',45],['הפועל אזור',46],['הפועל הרצליה',47],['הפועל מרמורק',45],['הפועל ניר רמת השרון',45],['חולון ירמיהו',44],['מכבי קריית מלאכי',46],['מכבי יבנה',46],['שמשון תל אביב',47]];
+function cupN(r){var c=D.mgr&&D.mgr.cup;return (c&&c.v===2?CUPN7:CUPN)[r];}
+function cupLast(){var c=D.mgr&&D.mgr.cup;return c&&c.v===2?6:3;}
+function xR(id){var m=D.mgr;m.xr=m.xr||{};return m.xr[id]||(m.xr[id]=aiRate(CLX[id-200][1]));}
 var FN=['איתי','נועם','יובל','עידו','רועי','אור','גיא','עומר','דניאל','אדם','ליאור','תומר','יונתן','אלון','שחר','ניר','עמית','רן','אריאל','מתן','טל','אסף','אביב','יואב','אופיר','ליאם','אושר','שי','גל','דור','אלעד','ניצן','נתנאל','אבי','מורן','קובי','חיים','משה','יהונתן','רז'];
 var LN=['כהן','לוי','מזרחי','פרץ','ביטון','דהן','אברהם','פרידמן','אזולאי','מלכה','אוחיון','חדד','גבאי','בן דוד','שמעוני','סבג','יוסף','ממן','אלבז','בוזגלו','גולן','שרון','רביבו','אטיאס','זכאי','קורן','נחום','אורבך','שטרית','עמר'];
 var AFN=['סאמר','מוחמד','אחמד','ואליד','מוסא','באסם','תאמר','יוסוף','עלי','חסן','נאדר','סלים','פאדי','רמי','ג׳מיל'];
@@ -1532,7 +1539,7 @@ function sqR(list,fm,lu,tid){
   return {r:rr,xi:xi,fc:fc};
 }
 function offOf(id,rr){var m=D.mgr;if(!m)return 0;m.off=m.off||{};if(m.off[id]===undefined){if(!rr||id>=14){m.off[id]=0;}else{m.off[id]=Math.round((TEAMS[id][1]-ovrT(rr))*0.75*10)/10;}}return m.off[id];}
-function teamR(id){var m=D.mgr;if(id>=100)return m.eu.opps[id-100].r;return id===m.team?mySq().r:(m.sq&&m.sq[id]?sqR(m.sq[id],null,null,id).r:m.ai[id]);}
+function teamR(id){var m=D.mgr;if(id>=200)return xR(id);if(id>=100)return m.eu.opps[id-100].r;return id===m.team?mySq().r:(m.sq&&m.sq[id]?sqR(m.sq[id],null,null,id).r:m.ai[id]);}
 function ovrT(r){return r[0]*0.15+r[1]*0.3+r[2]*0.3+r[3]*0.25;}
 function expG(a,b,home,k,dv){
   var atk=a[3]*0.45+a[2]*0.35+a[1]*0.2,def=b[0]*0.35+b[1]*0.4+b[2]*0.25;
@@ -1563,7 +1570,7 @@ function finalOrder(){var m=D.mgr;return (m.tier===1&&m.grp)?sortIds(m.grp.top).
 /* season setup */
 function mface(f){f=f||0;return f>=2?'😄':f===1?'🙂':f===0?'😐':f===-1?'😕':'😠';}
 function mlabel(a){return a>=1.3?'גבוה מאוד':a>=0.5?'גבוה':a>-0.5?'בינוני':a>-1.3?'נמוך':'נמוך מאוד';}
-function winProb(ev){var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),eur=ev.opp>=100,dv=eur?17:20,w=0,d=0,l=0,i,a,b;
+function winProb(ev){var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),eur=(ev.opp>=100&&ev.opp<200),dv=eur?17:20,w=0,d=0,l=0,i,a,b;
   if(eur)me=me.map(function(x){return x-LGO.Israel;});
   var l1=expG(me,op,ev.home,k[0],dv)*leadK(sq),l2=expG(op,me,!ev.home,k[1],dv);
   for(i=0;i<500;i++){a=pois(l1*luck());b=pois(l2*luck());if(a>b)w++;else if(a===b)d++;else l++;}
@@ -1573,6 +1580,7 @@ function startBud(id){var f=TT(id)[2];return Math.round(f*f*55+200);}
 function initCareer(tid){
   var old=D.mgr||{},m={team:tid,season:old.season||2026,tier:1,t1:[],t2:[],str:{},ai:{},pid:old.pid||0,hist:old.hist||[],tr:old.tr||{l:0,c:0},
     v:2,sq:{},bud:startBud(tid),conf:60,tac:'bal',squad:[],mk:[],news:[],log:[],fac:{st:0,yo:0,tc:0},trainee:0,phase:'season',nt:1},i;
+  if(old.prev)m.prev=old.prev;
   if(old.t1){m.t1=old.t1;m.t2=old.t2;m.str=old.str;m.ai=old.ai;}
   else for(i=0;i<14;i++){m.t1.push(i);m.t2.push(14+i);}
   if(!old.t1)for(i=0;i<28;i++){m.str[i]=TT(i)[1];m.ai[i]=aiRate(TT(i)[1]);}
@@ -1593,12 +1601,18 @@ function startSeason(){
   m.res=m.fx.map(function(r){return r.map(function(){return null;});});
   m.tb={};ids.forEach(function(id){m.tb[id]=[0,0,0,0,0,0,0];});
   m.split=false;m.grp=null;m.cal=[];
-  for(var r=0;r<26;r++){m.cal.push({t:'L',r:r});if(r===4||r===10||r===16||r===22)m.cal.push({t:'C',r:(r-4)/6});}
+  for(var r=0;r<26;r++){m.cal.push({t:'L',r:r});var ci=[2,5,9,13,17,21,24].indexOf(r);if(ci>=0)m.cal.push({t:'C',r:ci});}
   var qc=m.qual&&m.tier===1?m.qual:null;m.eu=null;ewInit();
   if(qc){euInit(qc);var nc=[];m.cal.forEach(function(e){nc.push(e);if(e.t==='L'&&e.r<=24)nc.push({t:'E',r:e.r});});m.cal=nc;}
   m.wk=0;m.squad.forEach(function(p){p.g=0;p.inj=0;p.y=0;p.sus=0;});
-  var cupIds=shuf(ids.concat(shuf(m.tier===1?m.t2:m.t1).slice(0,2)));
-  m.cup={alive:true,rd:0,pairs:pairsOf(cupIds),log:[],won:false,out:'',done:false};
+  var low=shuf(m.t2.concat(CLX.map(function(x,i){return 200+i;})));
+  m.cup={v:2,alive:true,rd:0,pairs:pairsOf(low.slice(0,24)),byes:low.slice(24),P:m.t1.slice(),log:[],won:false,out:'',done:false};
+  (function(){var pr=null;m.sup=null;
+    if(m.prev&&m.prev.h!=null)pr=[m.prev.h,m.prev.a];else if(!m.hist.length&&!m.prev)pr=[2,0];
+    if(!pr||pr[0]>=28||pr[1]>=28)return;
+    if(pr[0]===m.team||pr[1]===m.team){m.sup={h:pr[0],a:pr[1],done:false};m.cal.unshift({t:'S',r:0});}
+    else{var g=simAI(pr[0],pr[1]),w=g[0]>g[1]?pr[0]:g[0]<g[1]?pr[1]:(penWin(pr[0],pr[1])?pr[0]:pr[1]);m.sup={h:pr[0],a:pr[1],g:g,w:w,done:true};
+      m.news=m.news||[];m.news.unshift('🏆 אלוף האלופים: '+TT(w)[0]+' ניצחה את '+TT(w===pr[0]?pr[1]:pr[0])[0]+' ('+g[0]+'–'+g[1]+(g[0]===g[1]?', בפנדלים':'')+')');}})();
   var rk=ids.slice().sort(function(a,b){return ovrT(teamR(b))-ovrT(teamR(a));}).indexOf(m.team)+1;
   m.obj=m.tier===1?{pos:rk<=3?rk:(rk<=9?rk-1:12)}:{pos:rk<=3?2:8};
   m.phase='season';m.sum=null;m.last=null;m.gs={};m.spon=null;m.sponO=genSpon();m.press=null;m.evt=null;m.cev=null;m.rs=3;m.varL=1;m.fan=null;pickNem();m.mk=genMarket();m.mys=genMys();m.offers=genOffers();
@@ -1656,6 +1670,90 @@ var IVP=[
  ['t1','האם הקבוצה מוכנה ממש לעונה הזו?',[['אני מאמין בכל שחקן שלי',1,1,0],['יש לנו עוד עבודה, ואני אומר את זה לשחקנים',0,0,0.1],['חלק מהם לא ברמה הנדרשת',-1,-1,0.2],['הקבוצה הכי חזקה שיש לי',1,1,0.2]]],
  ['t2','מה אתה חושב על האווירה בחדר ההלבשה?',[['מצוינת, משפחה אמיתית',1,1,0],['צריך קצת יותר משמעת',0,-1,0.1],['יש מתחים אבל נפתור',0,0,0.1],['לא מעניין אותי האווירה, רק התוצאות',-1,-1,0.2]]]
 ];
+/* ===== שאלות ראיון לפי הקשר והעבר ===== */
+function IA(t,c,mo,b){return [t,c,mo,b];}
+var IVX={
+ CH:[
+  ['c1','אתם אלופי המדינה. יש מי שחושב שאי אפשר לעצור אתכם העונה. מה אתה אומר?',[IA('מכל קבוצה אפשר להפסיד, נישאר על הקרקע',1,1,0),IA('בואו נראה מי יעצור אותנו',1,0,0.3),IA('אנחנו כאן כדי להגן על התואר, נקודה',2,1,0.1),IA('האליפות שעברה כבר היסטוריה',1,0,0)]],
+  ['c2','כל הקבוצות מתחזקות כדי להפיל את האלופה. מה התוכנית?',[IA('להישאר רעבים, כמו בעונה הראשונה',2,1,0),IA('נחזיק את הסגל ונשפר פינות קטנות',1,1,0),IA('נקנה עוד כוכב, ההנהלה יודעת',0,0,0.2),IA('אין לי מושג, נחשוב על זה בדרך',-1,0,0.1)]],
+  ['c3','ההנהלה מצפה עכשיו לכפול את התואר. זה לחץ?',[IA('לחץ זה פריבילגיה של אלופים',2,0,0.1),IA('הם יקבלו אותי באותה רמה כמו תמיד',0,0,0),IA('אני לא עונה על לחצים מהנהלה בתקשורת',0,0,0.2),IA('כל תואר שווה הרבה, לא נתפשר',1,1,0)]],
+  ['c4','כמה משחקני הסגל מבקשים העלאה אחרי האליפות. תיתן להם?',[IA('מגיע להם, הם הוכיחו',0,2,0.1),IA('נדבר רק על מי שבאמת מוביל',1,0,0.2),IA('אף אחד לא גדול מהקבוצה',1,-1,0.3),IA('כל משא ומתן יתנהל בשקט',0,1,0)]],
+  ['c5','אלופים נוטים להירדם בעונה שאחרי. איך מונעים את זה?',[IA('אימונים קשים וחוסר סיפוק',2,0,0.1),IA('מחליפים שחקנים כדי לשמור על רעננות',1,0,0.2),IA('קהל הבית יעשה את העבודה',1,1,0),IA('אני לא חושש, הקבוצה בשלה',0,0,0.3)]]],
+ TR:[
+  ['t1','זכיתם בגביע המדינה בעונה שעברה. אפשר לחזור על זה?',[IA('הגביע אהוב עלינו, ננסה שוב',1,1,0),IA('כל סבב הוא קרב בפני עצמו',1,0,0),IA('הליגה חשובה יותר, אבל לא נוותר',0,0,0.1),IA('כן, ואולי גם נעשה דאבל',2,1,0.3)]],
+  ['t2','האירופה משכה אתכם. אפשר להתמודד עם הלו"ז?',[IA('סגל רחב נועד בדיוק לזה',1,1,0),IA('נסובב שחקנים, אין ברירה',1,0,0),IA('יש לי נוסחה, אל תדאגו',1,0,0.25),IA('זה אתגר נהדר, חיכינו לו',2,1,0)]],
+  ['t3','אחרי הזכייה האחרונה, כולם מדברים על הקבוצה. איך אתה מתמודד עם התהילה?',[IA('התהילה לא משחקת בשבילנו',1,0,0),IA('נהנים מהרגע, אבל חוזרים לעבודה',1,1,0),IA('אני אוהב את זה, אני לא אסתיר',0,0,0.3),IA('התקשורת מדברת, אנחנו עובדים',0,1,0)]]],
+ REL:[
+  ['r1','אתם במקומות התחתונים. הקבוצה בסכנת ירידה?',[IA('אנחנו נלחמים על כל נקודה',1,1,0),IA('לא חושב ככה, יש לנו איכות',0,0,0.3),IA('כן, ואני לא מתחבא מזה',1,-1,0),IA('שאלה לא הוגנת, העונה ארוכה',0,0,0.1)]],
+  ['r2','יש מי שדורש להחליף את המאמן. תגובה?',[IA('התוצאות ישתפרו, תנו לי זמן',0,0,0.2),IA('אני חושב רק על המשחק הבא',1,0,0),IA('אני מקבל אחריות מלאה',1,1,0),IA('מי שרוצה להחליף, שיבוא וינסה',-1,-1,0.4)]],
+  ['r3','האוהדים מתעצבנים. מה תגיד להם?',[IA('אנחנו איתכם, תישארו איתנו',2,1,0),IA('מבטיח שנעשה הכול כדי להציל את העונה',1,1,0.1),IA('הביקורת מובנת, וגם צודקת',1,0,0.1),IA('הם לא יודעים מה קורה באימונים',-1,-1,0.3)]],
+  ['r4','האם אתה שוקל לצאת לשוק ההעברות בגלל המצב?',[IA('כן, אם נמצא את השחקן הנכון',1,0,0),IA('אנחנו צריכים קודם לתקן את מה שיש',1,1,0),IA('ההנהלה תחליט',0,0,0),IA('הסגל טוב, רק צריך לשחרר את הראש',1,1,0.2)]],
+  ['r5','איך שומרים על המורל בתקופה כזו?',[IA('שיחות אישיות עם כל שחקן',2,1,0),IA('לא מדברים על ירידה בחדר',1,0,0),IA('מנצחים משחק אחד והכול משתנה',0,0,0.2),IA('הלחץ מייצר גיבורים',0,1,0.3)]]],
+ RACE:[
+  ['k1','אתם מתמודדים על האליפות. איך זה מרגיש?',[IA('כיף גדול, לשם אנחנו שייכים',2,1,0.1),IA('נשארים ממוקדים, זה רק שלב',1,1,0),IA('אנחנו לא מדברים על אליפות',0,0,0),IA('כבר אפשר להריח את התואר',1,0,0.4)]],
+  ['k2','מי המתחרה המסוכנת ביותר שלכם?',[IA('אף קבוצה, אנחנו מתחרים בעצמנו',1,0,0),IA('כולם מסוכנים, כל משחק קשה',1,1,0),IA('יש שתי קבוצות שצריך לשים לב אליהן',0,0,0),IA('הם יתרסקו בסוף',0,-1,0.4)]],
+  ['k3','האם הקבוצה תעמוד בלחץ של סוף העונה?',[IA('אנחנו בנויים לזה',2,1,0.1),IA('נעבוד על ההיבט המנטלי',1,0,0),IA('הניסיון מההיסטוריה עוזר לנו',1,0,0),IA('נראה, זה יהיה מעניין',0,0,0.2)]],
+  ['k4','יש פער קטן בצמרת. מה אתה שולח לשחקנים?',[IA('לא לפחד לנצח',2,1,0),IA('להתרכז רק במשחק הבא',1,1,0),IA('כל נקודה קובעת, אין בזבוזים',1,0,0.1),IA('אני לא שולח, הם יודעים',0,0,0)]],
+  ['k5','האם אתה רואה את הקבוצה כפייבוריטית לתואר?',[IA('כן, אנחנו הקבוצה הטובה ביותר בליגה',1,1,0.4),IA('אני לא עוסק בפייבוריטיות',1,0,0),IA('יש עוד הרבה עבודה',1,1,0),IA('אנחנו בין הטובות, זה מספיק',0,0,0.1)]]],
+ WS:[
+  ['s1','שלושה ניצחונות ברצף. מה הסוד?',[IA('אחדות בקבוצה, זה הכול',2,1,0),IA('הטקטיקה עובדת בדיוק כמו שתכננתי',1,0,0.2),IA('גם קצת מזל, בואו נהיה כנים',0,1,0),IA('הסוד הוא העבודה היומיומית',1,1,0)]],
+  ['s2','יש מי שחושב שאתם בתקופת שיא. זה יימשך?',[IA('אנחנו נעשה הכול כדי לשמור',1,1,0.1),IA('כל משחק הוא סיפור חדש',1,0,0),IA('כשהקבוצה בטוב, קשה לעצור',1,1,0.2),IA('אל תפריעו לנו, אנחנו בזרם',0,0,0.3)]],
+  ['s3','האם אתה חושש מהיפוך המומנטום?',[IA('מומנטום זה מה שבונים כל יום',1,0,0),IA('אנחנו מוכנים לכל תרחיש',1,1,0),IA('אין לי מה לחשוש, הקבוצה חזקה',0,0,0.3),IA('אולי, אבל נקבל את זה כשיבוא',0,0,0)]],
+  ['s4','האוהדים כבר חולמים. מה תבקש מהם?',[IA('להמשיך לתמוך בכל מצב',2,1,0),IA('להישאר צנועים כמונו',1,0,0),IA('להביא את האנרגיה לאצטדיון',1,1,0),IA('שיחלמו, זה מגיע להם',0,0,0.2)]]],
+ LS:[
+  ['l1','שלושה הפסדים ברצף. מה קורה לקבוצה?',[IA('תקופה לא פשוטה, נצא ממנה ביחד',1,1,0),IA('זה לא קשור לכישרון, יש בעיה בראש',0,0,0.1),IA('אני לוקח את האחריות',1,0,0),IA('נדבר על זה בחדר, לא כאן',0,1,0)]],
+  ['l2','יש מי שאומר שאיבדת את החדר. מה תענה?',[IA('השחקנים איתי, תשאלו אותם',1,1,0.2),IA('אני מכיר את החדר, הכול בסדר',0,0,0.3),IA('מי שאומר את זה לא נמצא שם',-1,-1,0.3),IA('אין מה לענות על שמועות',0,0,0)]],
+  ['l3','האם אתה חושב על שינויים בהרכב?',[IA('כן, מי שלא בכושר יישב',1,-1,0),IA('הרכב ירוץ לפי האימונים',1,0,0),IA('לא, צריך יציבות',0,1,0.1),IA('הכול פתוח, כולל אני',0,0,0)]],
+  ['l4','ההנהלה פגשה אותך השבוע?',[IA('כן, שיחה טובה, יש תמיכה',1,0,0.1),IA('לא יצא לנו, כרגע',0,0,0.2),IA('אני לא מדבר על שיחות פנימיות',0,0,0),IA('כן, והיה מתוח',-1,-1,0.1)]],
+  ['l5','איך אתה ישן בלילה אחרי הפסדים כאלה?',[IA('לא ישן, אני חושב על הכול',1,0,0),IA('אני ישן טוב, מצפונו נקי',0,0,0.3),IA('עם הילדים, יש חיים מחוץ לכדורגל',1,1,0),IA('אני לא עונה על שאלות אישיות',0,0,0.1)]]],
+ UB:[
+  ['u1','כמה משחקים בלי ניצחון. מה חסר?',[IA('פחות כדורים לחלוץ וקצת מזל',0,0,0),IA('ריכוז בשטח, זה הכול',1,0,0),IA('אנחנו צריכים לנצח, ובמהירות',1,1,0),IA('כל קבוצה עוברת תקופות כאלה',0,1,0.1)]],
+  ['u2','האוהדים מתחילים לשרוק. מה תאמר להם?',[IA('אני מבין אתכם, וגם אנחנו רוצים לנצח',1,1,0),IA('תנו לנו זמן, יש פה קבוצה טובה',1,0,0),IA('שרקו עלי, לא על השחקנים',2,1,0.2),IA('אני לא עונה על שריקות',0,0,0)]],
+  ['u3','האם הקבוצה זקוקה לשינוי טקטי?',[IA('כן, נעשה התאמות',1,0,0),IA('השיטה נכונה, הביצוע לא',1,0,0.1),IA('אני לא מסביר את הטקטיקה מראש',0,0,0),IA('אני מנסה כל דבר שיעזור לנצח',0,0,0.2)]]],
+ CUP:[
+  ['g1','גביע המדינה הוא תחרות מיוחדת. מה אתה מרגיש?',[IA('גביע זה קסם, כל קבוצה יכולה להפתיע',1,1,0),IA('נתייחס לכל יריב כמו לגמר',2,1,0),IA('הליגה קודמת, אבל אנחנו רוצים גם גביע',0,0,0.1),IA('אין קבוצות קטנות, רק משחקים',1,0,0)]],
+  ['g2','יש חשש מהפתעות בגביע. איך מתכוננים?',[IA('מכבדים כל יריב, לא מזלזלים',2,0,0),IA('מעמידים את הכוחות הטובים ביותר',1,1,0),IA('נסובב קצת, הליגה חשובה',0,-1,0.2),IA('אני לא חושש מהפתעות',0,0,0.3)]],
+  ['g3','השחקנים מתלהבים מהמשחק הזה?',[IA('כן, זה אחד מהמשחקים האהובים',1,1,0),IA('הם מקצוענים, זה משחק כמו אחר',0,0,0),IA('צריך לשחרר את הראש, הם יודעים',0,0,0),IA('יש להם מוטיבציה גבוהה',1,1,0.1)]],
+  ['g4','אתה חושב שהגביע הוא ההזדמנות שלכם לתואר?',[IA('בהחלט, ככה מתחילים לבנות היסטוריה',1,1,0.1),IA('בכל תחרות יש הזדמנות',1,0,0),IA('נראה לאן הדרך תוביל',0,0,0),IA('הליגה תמיד קודמת',0,0,0.1)]]],
+ SUP:[
+  ['q1','אלוף האלופים פותח את העונה. מה אתה מצפה?',[IA('להתחיל עם גביע, איזה כיף',2,1,0),IA('זה משחק חשוב ונטפל בו ברצינות',1,1,0),IA('מדובר בפתיחת העונה, ננסה לקחת ביטחון',1,0,0),IA('נראה איפה אנחנו עומדים',0,0,0)]],
+  ['q2','זה הגביע הראשון של העונה. עד כמה זה חשוב?',[IA('כל תואר חשוב, גם זה',1,1,0),IA('זה אות פתיחה, והאוהדים רוצים לחגוג',1,0,0),IA('אני חושב רק על הליגה',0,0,0.2),IA('זה משחק טוב להבין מה יש לנו',0,0,0)]]],
+ GEN:[
+  ['x1','איך אתה מגדיר את יחסי הקבוצה עם האוהדים?',[IA('הם המשפחה שלנו',1,1,0),IA('מורכב, כמו בכל מועדון',0,0,0),IA('הם דורשים הרבה, וזה בסדר',1,0,0),IA('הם אחד מהסיבות שאני כאן',2,1,0)]],
+  ['x2','איך אתה מרגיש לגבי השיפוט הערב?',[IA('אין לי טענות, זה חלק מהמשחק',1,0,0),IA('היו כמה החלטות מוזרות',0,0,0.3),IA('אני לא מדבר על שופטים',0,0,0),IA('הם עשו את שלהם, אנחנו שלנו',0,0,0.1)]],
+  ['x3','יש עומס משחקים. האם זה פוגע בכושר?',[IA('הסגל רחב מספיק',1,1,0),IA('נעבוד על התאוששות',1,0,0),IA('אין תירוצים, אנחנו מקצוענים',0,0,0.1),IA('יש בעיה, ואני מרגיש אותה',0,-1,0.1)]],
+  ['x4','מה אתה אומר על הצעירים בקבוצה?',[IA('יש כמה פנינים, נטפח אותם',1,1,0),IA('הם יקבלו הזדמנות כשיהיו מוכנים',0,0,0),IA('אני מאמין בכישרון, גם בגיל צעיר',1,1,0.1),IA('הם עוד צריכים להשתפר',0,-1,0)]],
+  ['x5','האם חלון ההעברות הקרוב משנה משהו?',[IA('נחפש כל שיפור אפשרי',1,0,0),IA('אנחנו עובדים על כמה דברים',0,0,0),IA('אני לא מדבר על קניות',0,0,0),IA('הסגל מספיק טוב כרגע',0,1,0.1)]],
+  ['x6','איך אתה מתאר את אווירת הקבוצה?',[IA('מצוינת, כמו משפחה',2,1,0),IA('מקצועית ותחרותית',1,0,0),IA('יש עליות ומורדות, זה טבעי',0,0,0),IA('אני מרוצה, אפילו מאוד',1,1,0)]],
+  ['x7','יש ביקורת על הסגנון המשחקי. מה אתה עונה?',[IA('הביקורת מקובלת, אבל התוצאות מדברות',1,0,0.1),IA('אני לא משנה שיטה בגלל ביקורת',0,-1,0.1),IA('נשפר מה שאפשר',1,0,0),IA('כולם מומחים בכדורגל',0,0,0.2)]],
+  ['x8','מי המאמן שהכי השפיע עליך?',[IA('הרבה ממנו למדתי, נשארתי תלמיד',1,1,0),IA('אני הולך בדרך שלי',0,0,0.1),IA('יש כמה שמות גדולים שאני מעריך',1,0,0),IA('אני מעדיף לא לציין שמות',0,0,0)]],
+  ['x9','האם הדירוג בטבלה משקף את הכוח האמיתי שלכם?',[IA('כן, בדיוק כמו שצריך',0,0,0),IA('אנחנו חזקים יותר מהטבלה',1,1,0.2),IA('הטבלה משקרת רק בסוף העונה',0,0,0),IA('אני לא מסתכל על הטבלה',0,0,0.1)]],
+  ['x10','מה אתה אומר על הכוכב הגדול של הקבוצה?',[IA('הוא מהמובילים בליגה',1,1,0),IA('כל שחקן חשוב לי באותה מידה',1,0,0),IA('הוא צריך לתת עוד',0,-1,0.2),IA('אני לא מצפה פחות מהקפטן',0,0,0)]],
+  ['x11','איך מתמודדים עם הלחץ התקשורתי?',[IA('אני לא קורא עיתונים',1,0,0),IA('העבודה שלי להתעלם',1,0,0),IA('זה חלק מהתפקיד',1,1,0),IA('לפעמים קשה, אבל לומדים',0,0,0)]],
+  ['x12','מה היעד שלך לשאר העונה?',[IA('לשפר כל משחק',1,1,0),IA('לסיים ב-3 הראשונות',1,0,0.2),IA('להגיע לאירופה',1,1,0.2),IA('להישאר ביציבות, להתקדם',0,0,0)]]],
+ FIN:[
+  ['f1','הקבוצה במינוס כספי. מה תאמר להנהלה?',[IA('נעבוד בתקציב ונמצא פתרונות',1,0,0),IA('תנו לי עוד קצת זמן ואני אחזיר ת\'כסף',0,0,0.1),IA('אין לי שליטה על כסף, אני מאמן',0,0,0.2),IA('אשמח לרווח מכירות שחקנים',0,0,0.1)]],
+  ['f2','האם אתה מוכן לוותר על כוכב בשביל איזון תקציבי?',[IA('אם צריך, כן. כל שחקן הוא חלק מתוכנית',0,-1,0.1),IA('לא, הוא הלב של הקבוצה',1,1,0.1),IA('נראה את ההצעה',0,0,0),IA('אני מעדיף לקצץ במקומות אחרים',1,0,0)]]],
+ INJ:[
+  ['i1','הרבה פציעות בקבוצה. אשמת האימונים?',[IA('אין קשר, זה חלק ממשחק',0,0,0.1),IA('נבדוק את עומס האימונים',1,0,0),IA('הסגל רחב, נמשיך הלאה',1,0,0),IA('יש לי חשד, אבל אבדוק',0,0,0)]],
+  ['i2','האם הפציעות משנות את הטקטיקה?',[IA('כן, צריך להתאים את השיטה',1,0,0),IA('לא, יש לנו תחליפים טובים',1,1,0.1),IA('נהיה יצירתיים',1,0,0),IA('אין תירוצים',0,0,0.2)]]]
+};
+function ivCtx(r,plan){
+  var m=D.mgr,ev=r.ev,out=[],ord=m.phase==='season'?finalOrder():[],pos=ord.indexOf(m.team)+1,tb=m.tb[m.team]||[0],pl=tb[0]||0,h=m.hist||[],last=h[h.length-1],rf=m.rf||[],ends=function(c,n){var k=0;for(var i=rf.length-1;i>=0&&rf[i]===c;i--)k++;return k>=n;};
+  var lastNoW=function(n){if(rf.length<n)return false;return rf.slice(-n).every(function(x){return x!=='W';});};
+  if(last&&!last.fired&&last.tier===1&&last.pos===1&&m.wk<14)out=out.concat(IVX.CH);
+  if(last&&!last.fired&&(last.cup==='זכייה'||(last.eu&&/זכ/.test(last.eu)))&&m.wk<18)out=out.concat(IVX.TR);
+  if(pl>=8&&m.tier===1&&pos>=11)out=out.concat(IVX.REL);
+  if(pl>=10&&pos>=1&&pos<=2)out=out.concat(IVX.RACE);
+  if(ends('W',3))out=out.concat(IVX.WS);
+  if(ends('L',3))out=out.concat(IVX.LS);
+  if(lastNoW(4)&&!ends('L',3))out=out.concat(IVX.UB);
+  if(ev.t==='C')out=out.concat(IVX.CUP);
+  if(ev.t==='S')out=out.concat(IVX.SUP);
+  if(m.bud<0)out=out.concat(IVX.FIN);
+  if(m.squad.filter(function(p){return p.inj>0;}).length>=3)out=out.concat(IVX.INJ);
+  return out;
+}
 var IVB={
  W:[
   ['w1','ניצחון! איך אתה מרגיש עכשיו?',[['מאושר, אבל כבר חושב על המשחק הבא',1,0,0],['זה היה בשבילכם, האוהדים, אתם הכוח שלנו',2,1,0.1],['ידענו שננצח, אין פה הפתעה',1,1,0.35],['אני רוצה עוד: נשחק טוב יותר בשבוע הבא',1,0,0]]],
@@ -1720,7 +1818,16 @@ function genIv(r,plan,fav,up,derby){
   var rep={'{O}':tn(ev.opp),'{T}':tn(m.team),'{S}':(r.scorers&&r.scorers[0])||'החלוץ','{M}':r.motm||'הקפטן','{W}':weak?weak.n:'מישהו','{G}':gk?gk.n:'השוער'};
   function sub(t){return t.replace(/\{[A-Z]\}/g,function(k){return rep[k]||k;});}
   m.ivSeen=m.ivSeen||{};
-  var pool=[],spec=[];
+  m.rf=m.rf||[];m.rf.push(res);if(m.rf.length>8)m.rf.shift();
+  (function(){m.msn=m.msn||{};var ns=m.news=m.news||[];
+    var top=Object.keys(m.gs||{}).map(function(k){return m.gs[k];}).filter(function(z){return z[1]===m.team;}).sort(function(a,b){return b[2]-a[2];})[0];
+    if(top&&[10,15,20,25,30].indexOf(top[2])>=0&&!m.msn['g'+top[0]+top[2]+m.season]){m.msn['g'+top[0]+top[2]+m.season]=1;ns.unshift('⚽ '+top[0]+' חצה את רף '+top[2]+' השערים העונה, והעיתונות מדברת רק עליו!');}
+    var k=0;for(var i=m.rf.length-1;i>=0&&m.rf[i]==='W';i--)k++;
+    if(k>=5&&!m.msn['w'+m.season+m.wk]){m.msn['w'+m.season+m.wk]=1;ns.unshift('🔥 '+k+' ניצחונות ברצף! באצטדיון מדברים על קבוצה מיוחדת.');}
+    var l=0;for(var j=m.rf.length-1;j>=0&&m.rf[j]==='L';j--)l++;
+    if(l>=4&&!m.msn['l'+m.season+m.wk]){m.msn['l'+m.season+m.wk]=1;ns.unshift('📉 '+l+' הפסדים ברצף. עיתונאים כבר שואלים אם המאמן בסכנה.');}
+  })();
+  var pool=[],spec=[],cx=ivCtx(r,plan);
   if(res==='L'&&fav)spec=spec.concat(IVB.FAV);
   if(res==='W'&&up)spec=spec.concat(IVB.UP);
   if(gd>=3&&res==='W')spec=spec.concat(IVB.BIG);
@@ -1729,16 +1836,18 @@ function genIv(r,plan,fav,up,derby){
   if((plan.E||[]).some(function(e){return e.t==='card'&&e.red;}))spec=spec.concat(IVB.RD);
   if(ev.t==='E')spec=spec.concat(IVB.EU);
   var main=IVB[res];
-  function fresh(L){var f=L.filter(function(q){return !m.ivSeen[q[0]];});return f.length?f:L;}
+  function fresh(L){var f=L.filter(function(q){return !m.ivSeen[q[0]];});return f.length>=3||f.length===L.length?f:(L.length<=3&&f.length?f:L);}
   var qs=[];
-  var sf=shuf(fresh(spec));if(sf.length)qs.push(sf[0]);
-  if(sf.length>1&&mr()<0.4)qs.push(sf[1]);
+  var cf=shuf(fresh(cx));if(cf.length)qs.push(cf[0]);if(cf.length>1&&mr()<0.5)qs.push(cf[1]);
+  var sf=shuf(fresh(spec));if(sf.length&&qs.length<2)qs.push(sf[0]);
+  if(sf.length>1&&mr()<0.35&&qs.length<3)qs.push(sf[1]);
+  var gx=shuf(fresh(IVX.GEN));if(gx.length&&mr()<0.7)qs.push(gx[0]);
   var mf=shuf(fresh(main));
   while(qs.length<4&&mf.length)qs.push(mf.shift());
   if(mr()<0.6){var pq=shuf(fresh(IVP))[0];if(pq){qs.splice(ri(0,Math.min(2,qs.length)),0,pq);}}
-  qs=qs.slice(0,4);
+  qs=qs.slice(0,5);
   qs.forEach(function(q){m.ivSeen[q[0]]=1;});
-  if(Object.keys(m.ivSeen).length>22)m.ivSeen={};
+  if(Object.keys(m.ivSeen).length>60)m.ivSeen={};
   function pidOf(n){var z=m.squad.filter(function(x){return x.n===n;})[0];return z?'p'+z.id:null;}
   var tmap={W:pidOf(rep['{W}']),S:pidOf(rep['{S}']),G:pidOf(rep['{G}']),M:pidOf(rep['{M}'])};
   var out=qs.map(function(q){return {t:sub(q[1]),a:q[2].map(function(a){return [sub(a[0]),a[1],a[2],a[3],a[4]?tmap[a[4]]:null];})};});
@@ -1862,13 +1971,15 @@ function nextEv(){
     if(i>=pr.length)return null;
     return {t:'L',r:ev.r,i:i,h:pr[i][0],a:pr[i][1],home:pr[i][0]===m.team,opp:pr[i][0]===m.team?pr[i][1]:pr[i][0]};}
   if(ev.t==='E'){var eo=euOpp(ev.r);if(!eo)return null;return {t:'E',r:ev.r,i:0,h:eo.home?m.team:eo.id,a:eo.home?eo.id:m.team,home:eo.home,opp:eo.id,leg:eo.p.leg,ph:eo.p.ph,lb:eo.p.lb,l1:m.eu.tie&&m.eu.tie.l1};}
+  if(ev.t==='S'){var sp=m.sup;if(!sp||sp.done)return null;return {t:'S',r:0,i:0,h:sp.h,a:sp.a,home:sp.h===m.team,opp:sp.h===m.team?sp.a:sp.h};}
   var ps=m.cup.pairs;for(i=0;i<ps.length;i++)if(ps[i][0]===m.team||ps[i][1]===m.team)break;
   if(i>=ps.length)return null;
   return {t:'C',r:ev.r,i:i,h:ps[i][0],a:ps[i][1],home:ps[i][0]===m.team,opp:ps[i][0]===m.team?ps[i][1]:ps[i][0]};
 }
 function evLabel(ev){var m=D.mgr;
   if(ev.t==='E')return EUN[m.eu.c]+' · '+(ev.lb||(m.eu.pend[ev.r]||{}).lb||'');
-  if(ev.t==='C')return 'גביע המדינה · '+CUPN[ev.r];
+  if(ev.t==='S')return 'אלוף האלופים';
+  if(ev.t==='C')return 'גביע המדינה · '+cupN(ev.r);
   if(ev.r>=26)return 'ליגה · '+(m.grp&&m.grp.top.indexOf(m.team)>=0?'בית עליון':'בית תחתון')+' · מחזור '+(ev.r-25);
   return 'ליגה · מחזור '+(ev.r+1);}
 function taker(){var m=D.mgr,x=mySq().xi.filter(function(p){return !p.x&&p.id;});if(m.tk){var c=x.filter(function(p){return p.id===m.tk;})[0];if(c)return c;}x.sort(function(a,b){return b.fk-a.fk;});return x[0]||null;}
@@ -1878,6 +1989,15 @@ function simRest(r,skip){
 }
 function cupAdvance(winners,userOut){
   var c=D.mgr.cup;
+  if(c.v===2){
+    if(c.rd>=6){c.done=true;c.pairs=[];c.champ=winners[0];c.won=(winners[0]===D.mgr.team);return;}
+    c.rd++;
+    if(c.rd===1){var lw=shuf(winners.concat(c.byes||[])),pl=shuf(c.P.slice()),ps=[],q;
+      for(q=0;q<pl.length;q++)ps.push(mr()<0.7?[lw[q],pl[q]]:[pl[q],lw[q]]);
+      ps.push([lw[pl.length],lw[pl.length+1]],[lw[pl.length+2],lw[pl.length+3]]);c.byes=lw.slice(pl.length+4);c.pairs=ps;}
+    else if(c.rd===2){c.pairs=pairsOf(shuf(winners.concat(c.byes||[])));c.byes=[];}
+    else c.pairs=pairsOf(winners);
+    return;}
   if(c.rd>=3){c.done=true;c.pairs=[];c.champ=winners[0];c.won=(winners[0]===D.mgr.team);}
   else{c.rd++;c.pairs=pairsOf(winners);}
 }
@@ -1908,11 +2028,12 @@ function weekly(ev,home){
   if(!m.fan&&ev.t==='L'&&mr()<0.3)genFan();
   if(m.news.length>10)m.news.length=10;
 }
+function cupIn(){var m=D.mgr;return m.cup.pairs.some(function(p){return p[0]===m.team||p[1]===m.team;});}
 function afterEvent(ev){
   var m=D.mgr;m.wk++;
   if(ev.t==='L'&&ev.r<=24)ewStep(ev.r);
   if(ev.t==='L'&&ev.r===25&&m.tier===1&&!m.split)makeSplit();
-  while(m.cal[m.wk]&&((m.cal[m.wk].t==='C'&&!m.cup.alive)||(m.cal[m.wk].t==='E'&&(!m.eu||!m.eu.pend||!m.eu.alive||!m.eu.pend[m.cal[m.wk].r]||m.eu.pend[m.cal[m.wk].r].done)))){if(m.cal[m.wk].t==='C')simCupRound(-1,0);m.wk++;}
+  while(m.cal[m.wk]&&((m.cal[m.wk].t==='C'&&(!m.cup.alive||!cupIn()))||(m.cal[m.wk].t==='E'&&(!m.eu||!m.eu.pend||!m.eu.alive||!m.eu.pend[m.cal[m.wk].r]||m.eu.pend[m.cal[m.wk].r].done)))){if(m.cal[m.wk].t==='C')simCupRound(-1,0);m.wk++;}
   if(m.wk>=m.cal.length)endSeason();
 }
 function makeSplit(){
@@ -1940,7 +2061,7 @@ function userMatch(ev,fkG,played,plan){
   sc.forEach(function(id){var q=m.squad.filter(function(z){return z.id===id;})[0];if(q){q.g++;gsAdd(m.team,q.n,1);}});
   var aggM=mine,aggT=them;if(ev.t==='E'&&ev.leg===2&&ev.l1){aggM+=ev.l1[0];aggT+=ev.l1[1];}
   var et=null,etx=function(){var x=pois(expG(me,op,ev.home,1,17)*0.25),y=pois(expG(op,me,!ev.home,1,17)*0.25);mine+=x;them+=y;aggM+=x;aggT+=y;et=[x,y];};
-  if(ev.t==='C'&&mine===them){etx();if(mine===them){pens=penWin(m.team,ev.opp);win=pens;}else win=mine>them;}
+  if((ev.t==='C'||ev.t==='S')&&mine===them){etx();if(mine===them){pens=penWin(m.team,ev.opp);win=pens;}else win=mine>them;}
   else if(ev.t==='E'&&(ev.leg===2||ev.ph==='f')){if(aggM===aggT)etx();if(aggM===aggT){pens=penWin(m.team,ev.opp);win=pens;}else win=aggM>aggT;}
   else win=mine>them;
   var res=mine>them?'W':mine<them?'L':(pens===null?'D':(pens?'W':'L'));
@@ -1952,13 +2073,15 @@ function userMatch(ev,fkG,played,plan){
   /* commit */
   if(ev.t==='L'){var hg=ev.home?mine:them,ag=ev.home?them:mine;m.res[ev.r][ev.i]=[hg,ag];addRes(ev.h,ev.a,hg,ag);simRest(ev.r,ev.i);}
   else if(ev.t==='E'){euCommit(ev,mine,them,win,r);}
+  else if(ev.t==='S'){var swid=win?m.team:ev.opp;m.sup={h:ev.h,a:ev.a,g:[ev.home?mine:them,ev.home?them:mine],w:swid,done:true,pn:pens!==null};
+    if(win){m.bud+=300;m.conf=clamp(m.conf+8,0,100);m.tr.s=(m.tr.s||0)+1;D.coins+=60;m.news.unshift('🏆 זכית באלוף האלופים! +€300K');}else m.news.unshift('הפסדת באלוף האלופים.');}
   else{
-    var wid=win?m.team:ev.opp;m.cup.log.push(CUPN[ev.r]+': '+line.split(': ')[1]);
-    if(!win){m.cup.alive=false;m.cup.out='הודחת ב'+CUPN[ev.r];}
+    var wid=win?m.team:ev.opp;m.cup.log.push(cupN(ev.r)+': '+line.split(': ')[1]);
+    if(!win){m.cup.alive=false;m.cup.out='הודחת ב'+cupN(ev.r);}
     simCupRound(ev.i,wid);
     if(m.cup.done&&m.cup.won){m.cup.out='זכית בגביע!';}
   }
-  var mulD=derby?2:1,up=ovrT(op)-ovrT(me)>4,dc=win?(ev.t==='C'?2:4)+(up?2:0):(res==='D'?(up?1:-1):(ev.t==='C'?-3:(up?-2:-4)));
+  var mulD=derby?2:1,up=ovrT(op)-ovrT(me)>4,dc=win?((ev.t==='C'||ev.t==='S')?2:4)+(up?2:0):(res==='D'?(up?1:-1):((ev.t==='C'||ev.t==='S')?-3:(up?-2:-4)));
   m.conf=clamp(m.conf+dc*mulD,0,100);
   m.lw=win;m.press=null;
   weekly(ev,ev.home);
@@ -1968,7 +2091,7 @@ function userMatch(ev,fkG,played,plan){
   else{var xs=sq.xi.filter(function(z){return !z.x&&z.id;});if(xs.length)mo=xs[Math.floor(mr()*xs.length)].n;}
   r.motm=mo;if(mo){var mq=m.squad.filter(function(z){return z.n===mo;})[0];if(mq)mq.f=clamp(mq.f+1,-2,2);}
   m.talk=null;
-  if(m.nem&&ev.opp===m.nem.id&&(ev.t==='L'||ev.t==='C')){m.nem[res==='W'?'w':res==='D'?'d':'l']++;
+  if(m.nem&&ev.opp===m.nem.id&&(ev.t==='L'||ev.t==='C'||ev.t==='S')){m.nem[res==='W'?'w':res==='D'?'d':'l']++;
     if(res==='W'){m.conf=clamp(m.conf+3,0,100);m.bud+=100;m.news.unshift('ניצחת את '+coachOf(m.nem.id)+', היריב הגדול שלך! +€100K');}else if(res==='L')m.conf=clamp(m.conf-1,0,100);}
   if(m.fan){var inX=sq.xi.some(function(z){return z.id===m.fan.id;});m.conf=clamp(m.conf+(inX?3:-2),0,100);if(inX)m.news.unshift('האוהדים אהבו שנתת הזדמנות לשחקן שביקשו.');m.fan=null;}
   r.tw=mkTweets(r);
@@ -2021,6 +2144,7 @@ function endSeason(){
   m.qual=qual;if(qual)lines.push(['העפלת ל'+EUN[qual]+' בעונה הבאה','']);
   if(m.eu)lines.push([m.eu.out||'אירופה','']);
   m.pro=pro;m.rel=rel;m.o1=o1;m.o2=o2;
+  (function(){var cu=m.cup&&m.cup.champ,ch=o1[0],ru=o1[1],op=(cu!=null&&cu<28&&o1.indexOf(cu)>=0&&cu!==ch)?cu:ru;m.prev={h:ch,a:op,ch:ch,cu:cu};})();
   m.hist.push({y:m.season,tier:m.tier,pos:pos,pts:tb[6],cup:m.cup.won?'זכייה':(m.cup.out||'—'),team:m.team,eu:m.eu?m.eu.out:''});
   m.sum={pos:pos,pts:tb[6],w:tb[1],d:tb[2],l:tb[3],gf:tb[4],ga:tb[5],prize:prize+cupBonus,verdict:verdict,lines:lines,coin:coin,nt:nt,tier:m.tier,cup:m.cup.won?'זכית בגביע':(m.cup.out||'לא השתתפת')};
   (function(){var lg=(m.tier===1?m.t1:m.t2).filter(function(id){return id!==m.team&&(m.tier!==1||rel.indexOf(id)<0);});
@@ -2149,6 +2273,8 @@ function tabHome(){
       s.offers.map(function(id){return '<div class="mode" style="cursor:default"><b>'+tn(id)+' '+mStars(m.str[id])+'</b><span>'+(m.str[id]>=m.str[m.team]+3?'קבוצה חזקה יותר משלך':m.str[id]<=m.str[m.team]-3?'קבוצה חלשה יותר, אתגר חדש':'קבוצה ברמה דומה')+'</span>'+ctrl('offer',id,'עבור ל'+tn(id),'alt sm')+'</div>';}).join('');}
     return h+ctrl('newseason',undefined,'נשאר ב'+tn(m.team)+' · לעונה '+seasonLabel(m.season+1));}
   ev=nextEv();
+  if(m.sup&&m.sup.done&&m.sup.g&&m.wk<5){var sw=m.sup.w,sl=sw===m.sup.h?m.sup.a:m.sup.h;
+    h+='<div class="card ev" style="border:1px solid var(--amber)"><b>🏆 אלוף האלופים</b><span style="color:var(--chalk)">'+esc(tn(sw))+' זכתה בגביע, אחרי '+m.sup.g[0]+'–'+m.sup.g[1]+' מול '+esc(tn(sl))+(m.sup.pn||m.sup.g[0]===m.sup.g[1]?' (בפנדלים)':'')+'. המפגש בין אלוף הליגה לזוכת הגביע מפתח את העונה.</span></div>';}
   h+=bkPanel();
   h+='<div style="display:flex;justify-content:flex-end;width:100%">'+ctrl('reset',undefined,mgArm==='reset'?'בטוח? לחץ שוב — הקריירה תימחק':'🔄 קריירה חדשה / החלפת קבוצה','alt sm')+'</div>';
   if(m.ivFb)h+='<div class="card ev" style="border:1px solid var(--amber)"><b>תגובה לתשובה</b><span style="color:var(--chalk)">'+esc(m.ivFb)+'</span></div>';
@@ -2157,7 +2283,7 @@ function tabHome(){
   var xs0=mySq().xi.filter(function(z){return z.id;}),avm=xs0.reduce(function(a,z){return a+(z.f||0);},0)/Math.max(1,xs0.length);
   h+='<div class="rsum" style="margin:6px 0"><span>מורל הקבוצה <b>'+mface(Math.round(avm))+' '+mlabel(avm)+'</b></span><span>קושי <b>'+['רגיל','קשה','אגדי'][(m.lv||2)-1]+'</b></span><span>שכר <b>'+Math.round(payroll())+'/'+(m.wcap||'-')+'K</b></span></div>'+(m.bud<0?'<p class="desc" style="color:#ff5a5a">גירעון של '+fmt(-m.bud)+': אמון ההנהלה יורד בכל מחזור עד שתאזן את התקציב.</p>':'<p class="desc" style="margin:0 0 4px">מורל גבוה מוסיף עד 3.6 נקודות דירוג לשחקן, ונמוך מוריד. אפשר לשפר אותו בראיונות, בנאום לפני משחק ובניצחונות.</p>');
   if(ev){
-    var op=teamR(ev.opp),gk=op[0],diff=gk<62?'קל':gk<72?'בינוני':'קשה',derby=TT(m.team)[3]===TT(ev.opp)[3],n=3+(derby?1:0)+((ev.t==='C'&&ev.r===3)?1:0),tk=taker();
+    var op=teamR(ev.opp),gk=op[0],diff=gk<62?'קל':gk<72?'בינוני':'קשה',derby=TT(m.team)[3]===TT(ev.opp)[3],n=3+(derby?1:0)+((ev.t==='C'&&ev.r===cupLast())?1:0),tk=taker();
     var hm=ev.home?m.team:ev.opp,aw=ev.home?ev.opp:m.team;
     h+='<div class="hero"><span class="stars" style="font-size:13px;text-align:center">'+evLabel(ev)+(derby?' · דרבי!':'')+' · '+(ev.home?'בית':'חוץ')+'</span><div class="vs"><div>'+crest(hm,54)+tn(hm)+'</div><b>נגד</b><div>'+crest(aw,54)+tn(aw)+'</div></div><div class="meta">כוח היריב '+Math.round(ovrT(op))+' · שוער יריב '+Math.round(gk)+' (קושי '+diff+')'+(tk?'<br>בועט חופשיות: '+esc(tk.n)+' ('+tk.fk+')':'')+(m.nem&&m.nem.id===ev.opp?'<br><b style="color:var(--amber)">⚔️ היריב הגדול שלך: '+esc(coachOf(ev.opp))+'</b>':'')+'</div></div>';
     var ox=oppXI(ev.opp),kp=ox&&ox.slice().sort(function(a,b){return b.o-a.o;})[0];
@@ -2207,7 +2333,8 @@ function tabFx(){
     if(ev.t==='L'){pr=m.fx[ev.r];for(j=0;j<pr.length;j++)if(pr[j][0]===m.team||pr[j][1]===m.team)break;
       if(j<pr.length)rows.push({lb:(i===m.wk?'הבא · ':'')+'ליגה מחזור '+(ev.r+1),h:pr[j][0],a:pr[j][1],n:i===m.wk});}
     else if(ev.t==='E'){var pe=m.eu&&m.eu.pend?m.eu.pend[ev.r]:null;if(!pe||pe.done||!m.eu.alive)continue;var eo={id:100+pe.opp,home:pe.home};rows.push({lb:(i===m.wk?'הבא · ':'')+EUN[m.eu.c]+' · '+pe.lb,h:eo.home?m.team:eo.id,a:eo.home?eo.id:m.team,n:i===m.wk});}
-    else rows.push({lb:(i===m.wk?'הבא · ':'')+'גביע · '+CUPN[ev.r],h:null,a:null,n:i===m.wk});}
+    else if(ev.t==='S'&&m.sup&&!m.sup.done)rows.push({lb:(i===m.wk?'הבא · ':'')+'אלוף האלופים',h:m.sup.h,a:m.sup.a,n:i===m.wk});
+    else if(ev.t==='C')rows.push({lb:(i===m.wk?'הבא · ':'')+'גביע · '+cupN(ev.r),h:null,a:null,n:i===m.wk});}
   if(!rows.length)return h+'<p class="desc">אין משחקים נוספים העונה.</p>';
   rows.forEach(function(x){h+='<div class="rc'+(x.n?' nx':'')+'"><small class="rl2">'+esc(x.lb)+'</small>'+(x.h!=null?'<div class="rv"><div>'+crest(x.h,30)+'<span>'+tn(x.h)+'</span></div><b>נגד</b><div>'+crest(x.a,30)+'<span>'+tn(x.a)+'</span></div></div>':'<p class="desc" style="margin:2px 0">היריב ייקבע בהגרלה / לפי התוצאות</p>')+'</div>';});
   return h;}
@@ -2245,9 +2372,10 @@ function tabMk(){
   return h;
 }
 function tabCup(){
-  var m=D.mgr,c=m.cup,h='<p class="desc">'+(c.done?(c.won?'זכית בגביע המדינה!':'הגביע הסתיים.'):c.alive?'ממשיכה בגביע: '+CUPN[c.rd]:(c.out||'הודחת'))+'</p>';
+  var m=D.mgr,c=m.cup,h='<p class="desc">'+(c.done?(c.won?'זכית בגביע המדינה!':'הגביע הסתיים.'):c.alive?'ממשיכה בגביע: '+cupN(c.rd):(c.out||'הודחת'))+'</p>';
   if(c.log.length){c.log.forEach(function(x){h+='<div class="line"><span>'+esc(x)+'</span></div>';});}
-  if(!c.done&&c.pairs.length){h+='<p class="sub">'+CUPN[c.rd]+'</p>';c.pairs.forEach(function(p){h+='<div class="line"><span>'+tn(p[0])+' נגד '+tn(p[1])+'</span></div>';});}
+  if(!c.done&&c.pairs.length){h+='<p class="sub">'+cupN(c.rd)+(c.v===2?' · '+c.pairs.length+' משחקים':'')+'</p>';c.pairs.forEach(function(p){h+='<div class="line"><span>'+tn(p[0])+' נגד '+tn(p[1])+'</span></div>';});}
+  if(m.sup&&m.sup.done)h+='<div class="line"><span>אלוף האלופים: '+tn(m.sup.h)+' '+m.sup.g[0]+'–'+m.sup.g[1]+' '+tn(m.sup.a)+(m.sup.pn||m.sup.g[0]===m.sup.g[1]?' (פנדלים)':'')+'</span><b>🏆 '+tn(m.sup.w)+'</b></div>';
   h+='<div class="line"><span>גביעים בקריירה</span><b>'+m.tr.c+'</b></div><div class="line"><span>אליפויות בקריירה</span><b>'+m.tr.l+'</b></div>';
   return h;
 }
@@ -2460,7 +2588,7 @@ function pkShow(r,done){
   }
   tm=setTimeout(step,900);
 }
-window.__pkGen=pkGen;window.__es=function(){endSeason();renderMgr();};window.__showRes=function(r){return showRes(r);};window.__pkShow=pkShow;
+window.__pkGen=pkGen;window.__genIv=function(a,b,c,d,e){return genIv(a,b,c,d,e);};window.__ns=function(){newSeason();};window.__tn=function(i){return TT(i)[0];};window.__sim1=function(){var ev=nextEv();if(ev&&D.mgr.phase==='season'){var r=userMatch(ev,0,false);return r.line;}return null;};window.__es=function(){endSeason();renderMgr();};window.__showRes=function(r){return showRes(r);};window.__pkShow=pkShow;
 function showRes(r){
   if(r.pens!==null&&r.pk&&!r.pkSeen){r.pkSeen=true;pkShow(r,function(){showRes(r);});return;}
   var m=D.mgr,ev=r.ev;
@@ -2588,10 +2716,11 @@ function fakeXI(fr){var xi=[];['GK','DF','DF','DF','DF','MF','MF','MF','FW','FW'
 function shooter(xi){var w=xi.map(function(p){return p.p==='FW'?4:p.p==='MF'?2.2:p.p==='DF'?0.7:0.02;}),t=w.reduce(function(a,b){return a+b;},0),r=mr()*t,i;for(i=0;i<xi.length;i++){r-=w[i];if(r<=0)return xi[i];}return xi[xi.length-1];}
 var WX=[['בהיר',1],['בהיר',1],['בהיר',1],['גשם',0.9],['חם מאוד',0.94],['רוח חזקה',0.92],['ערפל',0.97]];
 function planMatch(ev,played){
-  var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),derby=TT(m.team)[3]===TT(ev.opp)[3],eur=ev.opp>=100,dv=eur?17:20;
+  var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),derby=TT(m.team)[3]===TT(ev.opp)[3],eur=(ev.opp>=100&&ev.opp<200),dv=eur?17:20;
   if(eur)me=me.map(function(x){return x-LGO.Israel;});
-  var wx=WX[ri(0,WX.length-1)],og=pois(expG(me,op,ev.home,k[0],dv)*(played?0.68:1)*wx[1]*leadK(sq)*luck()),tg=pois(expG(op,me,!ev.home,k[1],dv)*(played?1.12:1)*wx[1]*luck());
-  var oxi=oppXI(ev.opp)||fakeXI(ev.opp>=100),myXI=sq.xi.filter(function(x){return !x.x&&x.id;}),sc=[],E=[],i,p,q;
+  var gp=ovrT(me)-ovrT(op),dm=1,dq=1;if(gp>4){dm=Math.max(0.62,1/(1+0.04*(gp-4)));dq=Math.min(1.35,1+0.035*(gp-4));}
+  var wx=WX[ri(0,WX.length-1)],og=pois(expG(me,op,ev.home,k[0],dv)*dm*(played?0.68:1)*wx[1]*leadK(sq)*luck()),tg=pois(expG(op,me,!ev.home,k[1],dv)*dq*(played?1.12:1)*wx[1]*luck());
+  var oxi=oppXI(ev.opp)||fakeXI(ev.opp>=100&&ev.opp<200),myXI=sq.xi.filter(function(x){return !x.x&&x.id;}),sc=[],E=[],i,p,q;
   var ogk=(oxi.filter(function(x){return x.p==='GK';})[0]||{n:'השוער'}).n,mgk=(myXI.filter(function(x){return x.p==='GK';})[0]||{n:'השוער'}).n;
   for(i=0;i<og;i++){p=pickScorer(sq.xi);if(p){sc.push(p.id);q=myXI[ri(0,myXI.length-1)];E.push({m:ri(2,89),t:'goal',me:1,id:p.id,who:p.n,as:(q&&q.id!==p.id&&q.p!=='GK')?q.n:''});}}
   for(i=0;i<tg;i++){p=shooter(oxi);q=oxi[ri(0,oxi.length-1)];E.push({m:ri(2,89),t:'goal',me:0,who:p.n,as:(q&&q!==p&&q.p!=='GK')?q.n:''});}
@@ -2631,7 +2760,7 @@ function replan2(L,tac){
   var keep=tail.filter(function(e){return e.t==='fk'||e.t==='card';});
   var og1=head.filter(function(e){return e.t==='goal'&&e.me;}).length,tg1=head.filter(function(e){return e.t==='goal'&&!e.me;}).length;
   m.tac=tac;var k=tacK();m.tac=old;
-  var sq=mySq(),op=teamR(L.ev.opp),wk=plan.wk||1,oxi=oppXI(L.ev.opp)||fakeXI(L.ev.opp>=100),myXI=sq.xi.filter(function(x){return !x.x&&x.id;});
+  var sq=mySq(),op=teamR(L.ev.opp),wk=plan.wk||1,oxi=oppXI(L.ev.opp)||fakeXI(L.ev.opp>=100&&L.ev.opp<200),myXI=sq.xi.filter(function(x){return !x.x&&x.id;});
   var og2=pois(expG(sq.r,op,L.ev.home,k[0])*0.8*wk*0.5),tg2=pois(expG(op,sq.r,!L.ev.home,k[1])*wk*0.5),i,p,N=[],T=['save','save','miss','post','danger','block'];
   var ogk=(oxi.filter(function(x){return x.p==='GK';})[0]||{n:'השוער'}).n,mgk=(myXI.filter(function(x){return x.p==='GK';})[0]||{n:'השוער'}).n;
   for(i=0;i<og2;i++){p=pickScorer(sq.xi);if(p)N.push({m:ri(46,89),t:'goal',me:1,id:p.id,who:p.n,as:''});}
