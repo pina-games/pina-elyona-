@@ -1537,7 +1537,7 @@ function ovrT(r){return r[0]*0.15+r[1]*0.3+r[2]*0.3+r[3]*0.25;}
 function expG(a,b,home,k,dv){
   var atk=a[3]*0.45+a[2]*0.35+a[1]*0.2,def=b[0]*0.35+b[1]*0.4+b[2]*0.25;
   var d=atk-def,cap=16,d2=cap*Math.tanh(d/cap),L=(D.mgr&&D.mgr.lv)||2;
-  return clamp(1.25*Math.exp(d2/((dv||20)*0.93))*(home?1.1:0.93)*k,0.36,3.6);
+  return clamp(1.25*Math.exp(d2/((dv||20)*0.93))*(home?1.1:0.93)*k,0.36,3.2);
 }
 function luck(){return Math.exp((mr()+mr()+mr()-1.5)*0.3);}
 function pois(l){var L=Math.exp(-l),k=0,p=1;do{k++;p*=mr();}while(p>L);return k-1;}
@@ -2022,6 +2022,8 @@ function endSeason(){
   m.pro=pro;m.rel=rel;m.o1=o1;m.o2=o2;
   m.hist.push({y:m.season,tier:m.tier,pos:pos,pts:tb[6],cup:m.cup.won?'זכייה':(m.cup.out||'—'),team:m.team,eu:m.eu?m.eu.out:''});
   m.sum={pos:pos,pts:tb[6],w:tb[1],d:tb[2],l:tb[3],gf:tb[4],ga:tb[5],prize:prize+cupBonus,verdict:verdict,lines:lines,coin:coin,nt:nt,tier:m.tier,cup:m.cup.won?'זכית בגביע':(m.cup.out||'לא השתתפת')};
+  (function(){var lg=(m.tier===1?m.t1:m.t2).filter(function(id){return id!==m.team&&(m.tier!==1||rel.indexOf(id)<0);});
+    m.sum.offers=shuf(lg.slice()).slice(0,3);})();
   m.phase='summary';
   if(m.conf<=0){m.phase='fired';m.hist.push({y:m.season,fired:true,team:m.team});}
 }
@@ -2142,7 +2144,9 @@ function tabHome(){
     if(s.nt!==s.tier)h+='<p class="desc">'+(s.nt===2?'ירדת לליגה הלאומית. אפשר לחזור מיד.':'עלית לליגת העל!')+'</p>';
     var ex=m.squad.filter(function(p){return p.c<=1;});
     if(ex.length)h+='<p class="sub">חוזים שמסתיימים</p><p class="desc">שחקנים אלה יעזבו בחינם בתחילת העונה אם לא תאריך להם חוזה (בלשונית סגל).</p>'+ex.map(function(p){return '<div class="line"><span>'+esc(p.n)+'</span><b>'+p.o+'</b></div>';}).join('');
-    return h+ctrl('newseason',undefined,'לעונה '+seasonLabel(m.season+1));}
+    if(s.offers&&s.offers.length){h+='<p class="sub">📨 הצעות עבודה</p><p class="desc">מועדונים אחרים מתעניינים בך אחרי העונה. אפשר להישאר, או לעבור לקבוצה חדשה.</p>'+
+      s.offers.map(function(id){return '<div class="mode" style="cursor:default"><b>'+tn(id)+' '+mStars(m.str[id])+'</b><span>'+(m.str[id]>=m.str[m.team]+3?'קבוצה חזקה יותר משלך':m.str[id]<=m.str[m.team]-3?'קבוצה חלשה יותר, אתגר חדש':'קבוצה ברמה דומה')+'</span>'+ctrl('offer',id,'עבור ל'+tn(id),'alt sm')+'</div>';}).join('');}
+    return h+ctrl('newseason',undefined,'נשאר ב'+tn(m.team)+' · לעונה '+seasonLabel(m.season+1));}
   ev=nextEv();
   h+=bkPanel();
   h+='<div style="display:flex;justify-content:flex-end;width:100%">'+ctrl('reset',undefined,mgArm==='reset'?'בטוח? לחץ שוב — הקריירה תימחק':'🔄 קריירה חדשה / החלפת קבוצה','alt sm')+'</div>';
@@ -2455,7 +2459,7 @@ function pkShow(r,done){
   }
   tm=setTimeout(step,900);
 }
-window.__pkGen=pkGen;window.__showRes=function(r){return showRes(r);};window.__pkShow=pkShow;
+window.__pkGen=pkGen;window.__es=function(){endSeason();renderMgr();};window.__showRes=function(r){return showRes(r);};window.__pkShow=pkShow;
 function showRes(r){
   if(r.pens!==null&&r.pk&&!r.pkSeen){r.pkSeen=true;pkShow(r,function(){showRes(r);});return;}
   var m=D.mgr,ev=r.ev;
@@ -2489,7 +2493,7 @@ function mgAct(a,v){
     if(a==='bkx'){try{save();var c=btoa(unescape(encodeURIComponent(JSON.stringify(D))));tx.value=c;tx.select();try{navigator.clipboard.writeText(c).then(function(){ms.textContent='הקוד הועתק. שמור אותו במקום בטוח.';},function(){ms.textContent='סמן והעתק את הקוד ידנית.';});}catch(e){ms.textContent='סמן והעתק את הקוד ידנית.';}}catch(e){ms.textContent='הייצוא נכשל.';}}
     else{try{var o=JSON.parse(decodeURIComponent(escape(atob(tx.value.trim()))));if(!o||typeof o!=='object'||!o.mgr)throw 0;window.__noSave=1;stWrite(JSON.stringify(o));ms.textContent='הייבוא הצליח. טוען מחדש...';setTimeout(function(){location.reload();},600);}catch(e){ms.textContent='הקוד לא תקין.';}}
     return;}
-  if(a!=='reset')mgArm='';
+  if(a!=='reset'&&a!=='offer')mgArm='';
   mgMsg='';
   var msg=null;
   if(a==='play'){sfx.click();startLive();return;}
@@ -2499,6 +2503,9 @@ function mgAct(a,v){
   else if(a==='euv'){euView=v;}
   else if(a==='fxw'){fxWin=v==='1';}
   else if(a==='newseason'){newSeason();mgTab='home';sfx.click();}
+  else if(a==='offer'){var oid=+v;if(m.phase!=='summary'||!m.sum||!m.sum.offers||m.sum.offers.indexOf(oid)<0)return;
+    if(mgArm!=='offer'+oid){mgArm='offer'+oid;mgMsg='לחץ שוב כדי לעבור ל'+TT(oid)[0]+'. התארים וההיסטוריה נשמרים.';renderMgr();return;}
+    mgArm='';mgMsg='';newSeason();initCareer(oid);mgTab='home';mgSel=0;sfx.click();}
   else if(a==='newclub'){go('mgrNew');return;}
   else if(a==='pick'){mgSel=+v;}
   else if(a==='rename'){var inp=$('mgName'),p=m.squad.filter(function(q){return q.id===mgSel;})[0];if(p&&inp){var nv=inp.value.trim().slice(0,16);if(nv){p.n=nv;save();}}}
@@ -2734,7 +2741,7 @@ var EUC={CL:['ריאל מדריד','ברצלונה','מנצ׳סטר סיטי','�
   ECL:['אייאקס','אולימפיאקוס','פיורנטינה','סלביה פראג','ליל','פאוק סלוניקי','ריינג׳רס','באניק אוסטרבה','סטורם גראץ','יאגלוניה בלוסטוק','סלובן ברטיסלבה','האקן','בודו גלימט','אפואל ניקוסיה','רפיד בוקרשט','לגיה ורשה','לך פוזנן','פרטיזן בלגרד','זאגלה לובין','קופנהגן','מאלמה','האמרבי','ויקינגור','ז׳ילינה','קלוז׳','סרטה בוקרשט','ססקה סופיה','גנק','הרטה ברלין','ברנלי','נורדשלאן']};
 var NEXTC={CL:'EL',EL:'ECL',ECL:null};
 var EUQ=['שריף טירספול','אסטנה','קראבאח','ז׳לגיריס','דינמו מינסק','ריגה','בוהמיאנס 1905','סילקבורג','פיוניק ירוואן','שקנדיה','מידטילנד','ספרטק טרנאבה','דינמו בטומי','סרבט ז׳נבה','הייבס','קרוסיידרס','לינקולן רד אימפס','סנט פטריק אתלטיק','דרי סיטי','פיאסט גליוויצה','זרינסקי מוסטאר','טורפדו קוטאיסי','ליאפאיה','דינמו בוקרשט','ויטוריה גימראש','ארמיניה בילפלד','פלורה טאלין','הנבירס'];
-var EUB={CL:[80,88],EL:[74,82],ECL:[67,76]};
+var EUB={CL:[82,90],EL:[77,85],ECL:[73,82]};
 var EURW={CL:[400,130,2500,[1500,2000,3000,5000],15000],EL:[250,80,1500,[900,1200,1800,3000],9000],ECL:[150,50,900,[500,700,1100,2000],5000]};
 var EUS=['po','r16','qf','sf','f'],SL={po:16,r16:18,qf:20,sf:22,f:24},STN={po:'פלייאוף',r16:'שמינית גמר',qf:'רבע גמר',sf:'חצי גמר',f:'גמר'};
 function euRate(c,bonus){var b=EUB[c],base=b[0]+mr()*(b[1]-b[0])+bonus;return [0,1,2,3].map(function(){return clamp(Math.round(base+ri(-3,3)),45,92);});}
