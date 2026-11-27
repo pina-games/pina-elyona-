@@ -1421,7 +1421,11 @@ var TEAMS=[
  ['הפועל ירושלים',65,6,'jm'],['עירוני קרית שמונה',64,3,'ks'],['מכבי פתח תקוה',63,4,'pt'],['הפועל פתח תקוה',62,4,'pt'],
  ['הפועל רמת גן',60,3,'rg'],['עירוני טבריה',58,2,'tb'],
  ['הפועל רעננה',57,2,'x14'],['מכבי אחי נצרת',56,3,'x15'],['הפועל עפולה',56,2,'x16'],['מ.ס. אשדוד',55,2,'x17'],['מכבי יפו',55,2,'x18'],['מ.ס. קריית ים',54,2,'x19'],['מכבי בני ריינה',54,2,'x20'],['בני יהודה תל אביב',53,2,'x21'],['הפועל כפר שלם',53,2,'x22'],['מ.ס. כפר קאסם',52,2,'x23'],['הפועל עכו',52,2,'x24'],['מכבי קריית גת',51,1,'x25'],['הפועל ראשון לציון',50,1,'x26'],['הפועל כפר סבא',50,1,'x27']];
-function TT(i){if(i>=200)return [CLX[i-200][0],1,1,'cl'+i];if(i>=100){var o=D.mgr&&D.mgr.eu&&D.mgr.eu.opps[i-100];return [o?o.n:'?',0,0,'eu'+i];}return TEAMS[i];}
+var FRP=[['שריף טירספול',64,'מולדובה'],['פיוניק ירוואן',65,'ארמניה'],['קראבאח',67,'אזרבייג׳ן'],['אסטנה',66,'קזחסטן'],['דינמו מינסק',63,'בלארוס'],['ריגה',63,'לטביה'],['פלורה טאלין',62,'אסטוניה'],['הייבס',62,'מלטה'],['לינקולן רד אימפס',60,'גיברלטר'],['דינמו בטומי',63,'גאורגיה'],['זרינסקי מוסטאר',64,'בוסניה'],['שקנדיה',62,'אלבניה'],['ז׳לגיריס',66,'ליטא'],['ספרטק טרנאבה',65,'סלובקיה'],['טורפדו קוטאיסי',62,'גאורגיה'],
+ ['כוכב האדום בלגרד',74,'סרביה'],['פרטיזן בלגרד',72,'סרביה'],['דינמו זאגרב',75,'קרואטיה'],['האיידוק ספליט',72,'קרואטיה'],['לודוגורץ',73,'בולגריה'],['קלוז׳',70,'רומניה'],['פרנצווארוש',74,'הונגריה'],['סלביה פראג',76,'צ׳כיה'],['באזל',76,'שווייץ'],['מאלמה',72,'שוודיה'],['בודו גלימט',74,'נורווגיה'],['קופנהגן',75,'דנמרק'],['אולימפיאקוס',77,'יוון'],['בשיקטאש',76,'טורקיה'],
+ ['פלמייראס',82,'ברזיל'],['פלמנגו',82,'ברזיל'],['בוקה ג׳וניורס',80,'ארגנטינה'],['ריבר פלייט',80,'ארגנטינה'],['אל אהלי',74,'מצרים'],['קאשימה אנטלרס',72,'יפן'],['אל נאסר',78,'סעודיה'],['אל הילאל',78,'סעודיה'],['אינטר מיאמי',74,'ארה״ב'],['סיאטל סאונדרס',68,'ארה״ב']];
+function pickFr(){return shuf(FRP.slice()).slice(0,4).map(function(x){return {n:x[0],c:x[2],r:aiRate(x[1]),g:null};});}
+function TT(i){if(i>=300){var f=D.mgr&&D.mgr.fr&&D.mgr.fr[i-300];return [f?f.n:'?',0,0,'fr'+i];}if(i>=200)return [CLX[i-200][0],1,1,'cl'+i];if(i>=100){var o=D.mgr&&D.mgr.eu&&D.mgr.eu.opps[i-100];return [o?o.n:'?',0,0,'eu'+i];}return TEAMS[i];}
 var PLAB={GK:'שוער',DF:'מגן',MF:'קשר',FW:'חלוץ'},POSORD={GK:0,DF:1,MF:2,FW:3};
 var CUPN=['שמינית גמר','רבע גמר','חצי גמר','גמר'];
 var CUPN7=['סיבוב ז׳','סיבוב ח׳','שלב ה־32','שמינית גמר','רבע גמר','חצי גמר','גמר'];
@@ -1577,7 +1581,7 @@ function plab(p){ensureSp(p);return SPL[p.sp]+(p.sp2&&p.sp2.length?' / '+p.sp2.m
 function formPos(fm){return (SLOTS[fm]||SLOTS['433']).map(function(s){return [0.06+(s[2]-0.07)*0.72,s[1]];});}
 function mySq(){return sqR(D.mgr.squad,D.mgr.fm,D.mgr.lu,D.mgr.team);}
 function sqR(list,fm,lu,tid){
-  var sl=SLOTS[fm||'433']||SLOTS['433'],n=sl.length,fit=list.filter(function(p){return !p.inj&&!p.sus;}),pick=[],used={},i,j,xi=[],fc=[0,0,0];
+  var sl=SLOTS[fm||'433']||SLOTS['433'],n=sl.length,fit=list.filter(function(p){return !p.inj&&!p.sus&&!p.nt;}),pick=[],used={},i,j,xi=[],fc=[0,0,0];
   if(list.some(function(p){return !p.sp||p.sp2===undefined;}))fixSp(list);
   function ef(p,k){return p.o+(p.f||0)*1.8-pen2(p,sl[k][0])*2.6-fatP(p)*0.8;}
   for(i=0;i<n;i++)pick.push(null);
@@ -1603,7 +1607,7 @@ function sqR(list,fm,lu,tid){
   return {r:rr,xi:xi,fc:fc};
 }
 function offOf(id,rr){var m=D.mgr;if(!m)return 0;m.off=m.off||{};if(m.off[id]===undefined){if(!rr||id>=14){m.off[id]=0;}else{m.off[id]=Math.round((TEAMS[id][1]-ovrT(rr))*0.75*10)/10;}}return m.off[id];}
-function teamR(id){var m=D.mgr;if(id>=200)return xR(id);if(id>=100)return m.eu.opps[id-100].r;return id===m.team?mySq().r:(m.sq&&m.sq[id]?sqR(m.sq[id],null,null,id).r:m.ai[id]);}
+function teamR(id){var m=D.mgr;if(id>=300)return m.fr[id-300].r;if(id>=200)return xR(id);if(id>=100)return m.eu.opps[id-100].r;return id===m.team?mySq().r:(m.sq&&m.sq[id]?sqR(m.sq[id],null,null,id).r:m.ai[id]);}
 function ovrT(r){return r[0]*0.15+r[1]*0.3+r[2]*0.3+r[3]*0.25;}
 function expG(a,b,home,k,dv){
   var atk=a[3]*0.45+a[2]*0.35+a[1]*0.2,def=b[0]*0.35+b[1]*0.4+b[2]*0.25;
@@ -1634,7 +1638,7 @@ function finalOrder(){var m=D.mgr;return (m.tier===1&&m.grp)?sortIds(m.grp.top).
 /* season setup */
 function mface(f){f=f||0;return f>=2?'😄':f===1?'🙂':f===0?'😐':f===-1?'😕':'😠';}
 function mlabel(a){return a>=1.3?'גבוה מאוד':a>=0.5?'גבוה':a>-0.5?'בינוני':a>-1.3?'נמוך':'נמוך מאוד';}
-function winProb(ev){var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),eur=(ev.opp>=100&&ev.opp<200),dv=eur?17:20,w=0,d=0,l=0,i,a,b;
+function winProb(ev){var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),eur=((ev.opp>=100&&ev.opp<200)||ev.opp>=300),dv=eur?17:20,w=0,d=0,l=0,i,a,b;
   if(eur)me=me.map(function(x){return x-LGO.Israel;});
   var l1=expG(me,op,ev.home,k[0],dv)*leadK(sq),l2=expG(op,me,!ev.home,k[1],dv);
   for(i=0;i<500;i++){a=pois(l1*luck());b=pois(l2*luck());if(a>b)w++;else if(a===b)d++;else l++;}
@@ -1668,7 +1672,7 @@ function takeOver(tid){
   m.squad=m.sq[tid]||realSquad(tid)||genSquad(tid,m.str[tid]-3);delete m.sq[tid];
   m.squad.forEach(function(p){p.inj=0;p.y=0;p.sus=0;});
   m.team=tid;
-  var past=m.cal.slice(0,m.wk).filter(function(e){return e.t!=='E';}),fut=m.cal.slice(m.wk).filter(function(e){return e.t!=='E'&&e.t!=='S';});
+  var past=m.cal.slice(0,m.wk).filter(function(e){return e.t!=='E';}),fut=m.cal.slice(m.wk).filter(function(e){return e.t!=='E'&&e.t!=='S'&&e.t!=='F';});
   m.eu=null;
   if(m.sup&&!m.sup.done){m.sup.done=true;m.sup.w=m.sup.h;m.sup.g=[1,0];}
   var isSp=function(e){return e.t==='L'&&e.r>=26;},doneL=past.filter(function(e){return e.t==='L'&&e.r<=25;}).length,mkSplit=false;
@@ -1691,7 +1695,7 @@ function takeOver(tid){
   if(c.done)c.alive=false;
   else{var inC=c.pairs.some(function(p){return p[0]===tid||p[1]===tid;})||(c.byes||[]).indexOf(tid)>=0||(c.rd===0&&c.P.indexOf(tid)>=0);c.alive=inC;if(!inC)c.out='הקבוצה כבר הודחה מהגביע';}
   m.bud=startBud(tid);m.conf=60;m.fac={st:0,yo:0,tc:0};m.trainee=0;m.tk=0;m.tac='bal';m.fm='433';m.lu=null;
-  m.news=['התחלת את התפקיד ב'+TT(tid)[0]+' באמצע העונה. בהצלחה!'];m.log=[];m.chal=null;m.evt=null;m.cev=null;m.press=null;m.fan=null;m.spon=null;m.sponO=genSpon();
+  m.news=['התחלת את התפקיד ב'+TT(tid)[0]+' באמצע העונה. בהצלחה!'];m.log=[];m.chal=null;m.evt=null;m.cev=null;m.press=null;m.fan=null;m.dd=null;m.spon=null;m.sponO=genSpon();
   m.mk=genMarket();m.mys=genMys();m.offers=genOffers();m.rs=3;m.varL=1;m.fo=null;m.last=null;m.lw=false;m.debtN=0;
   m.wcap=Math.round(payroll()*1.08+20);
   var lid=leagueIds(),rk=lid.slice().sort(function(a,b){return ovrT(teamR(b))-ovrT(teamR(a));}).indexOf(tid)+1;
@@ -1710,7 +1714,7 @@ function startSeason(){
   for(var r=0;r<26;r++){m.cal.push({t:'L',r:r});var ci=[2,5,9,13,17,21,24].indexOf(r);if(ci>=0)m.cal.push({t:'C',r:ci});}
   var qc=m.qual&&m.tier===1?m.qual:null;m.eu=null;ewInit();
   if(qc){euInit(qc);var nc=[];m.cal.forEach(function(e){nc.push(e);if(e.t==='L'&&e.r<=24)nc.push({t:'E',r:e.r});});m.cal=nc;}
-  m.wk=0;m.squad.forEach(function(p){p.g=0;p.inj=0;p.y=0;p.sus=0;});
+  m.wk=0;m.squad.forEach(function(p){p.g=0;p.inj=0;p.y=0;p.sus=0;p.nt=0;});
   var low=shuf(m.t2.concat(CLX.map(function(x,i){return 200+i;})));
   m.cup={v:2,alive:true,rd:0,pairs:pairsOf(low.slice(0,24)),byes:low.slice(24),P:m.t1.slice(),log:[],won:false,out:'',done:false};
   (function(){var pr=null;m.sup=null;
@@ -1719,13 +1723,18 @@ function startSeason(){
     if(pr[0]===m.team||pr[1]===m.team){m.sup={h:pr[0],a:pr[1],done:false};m.cal.unshift({t:'S',r:0});}
     else{var g=simAI(pr[0],pr[1]),w=g[0]>g[1]?pr[0]:g[0]<g[1]?pr[1]:(penWin(pr[0],pr[1])?pr[0]:pr[1]);m.sup={h:pr[0],a:pr[1],g:g,w:w,done:true};
       m.news=m.news||[];m.news.unshift('🏆 אלוף האלופים: '+TT(w)[0]+' ניצחה את '+TT(w===pr[0]?pr[1]:pr[0])[0]+' ('+g[0]+'–'+g[1]+(g[0]===g[1]?', בפנדלים':'')+')');}})();
+  m.fr=pickFr();for(var fk=3;fk>=0;fk--)m.cal.unshift({t:'F',r:fk});
   var rk=ids.slice().sort(function(a,b){return ovrT(teamR(b))-ovrT(teamR(a));}).indexOf(m.team)+1;
   m.obj=m.tier===1?{pos:rk<=3?rk:(rk<=9?rk-1:12)}:{pos:rk<=3?2:8};
-  m.squad.forEach(function(p){p.fa=0;});m.phase='season';m.sum=null;m.last=null;m.gs={};m.spon=null;m.sponO=genSpon();m.press=null;m.evt=null;m.cev=null;m.rs=3;m.varL=1;m.fan=null;pickNem();m.mk=genMarket();m.mys=genMys();m.offers=genOffers();
+  m.squad.forEach(function(p){p.fa=0;});m.phase='season';m.sum=null;m.last=null;m.gs={};m.spon=null;m.sponO=genSpon();m.press=null;m.evt=null;m.cev=null;m.rs=3;m.varL=1;m.fan=null;m.dd=null;pickNem();m.mk=genMarket();m.mys=genMys();m.offers=genOffers();
 }
 var SPN=['סופר־גול','אקסטרה־נט','ישרא־בנק','גלגל־דלק','טלקום פלוס','ביטוח ישיר+','אלקטרה גו','פרי־שוק'];
-function genSpon(){var f=TT(D.mgr.team)[2],n=shuf(SPN);
-  return [{n:n[0],b:Math.round(45+f*12),w:0,t:'בטוח'},{n:n[1],b:Math.round(30+f*8),w:45,t:'מאוזן'},{n:n[2],b:Math.round(10+f*4),w:110,t:'הימור'}];}
+function genSpon(){var m=D.mgr,f=TT(m.team)[2],n=shuf(SPN),t=m.tr||{},lp=m.lastPos||0;
+  var bo=1+0.05*Math.min(10,(t.l||0)*1.5+(t.c||0)*0.5)+(lp&&lp<=3?0.15:lp&&lp<=6?0.07:lp>=11?-0.1:0);
+  var rv=function(){return bo*(0.82+mr()*0.4);},R=function(x){return Math.round(x/5)*5;};
+  var T=[{t:'בטוח',b:R((45+f*12)*rv()),w:0},{t:'מאוזן',b:R((30+f*8)*rv()),w:R(45*rv())},{t:'הימור',b:R((10+f*4)*rv()),w:R(110*rv())},{t:'בונוס תארים',b:R((18+f*5)*rv()),w:0,tb:R(2400*rv()),tc:R(700*rv())},{t:'בונוס אירופה',b:R((28+f*7)*rv()),w:R(25*rv()),te:R(900*rv())}];
+  var pick=shuf(T.slice(1)).slice(0,2);pick.unshift(T[0]);pick=shuf(pick);
+  return pick.map(function(x,k){x.n=n[k];return x;});}
 function mgInit(){var m=D.mgr;if(!m||!m.squad)return;if(!m.lv)m.lv=2;if(!m.wcap)m.wcap=Math.round(payroll()*1.12+20);m.fm=m.fm||'433';if(m.rs==null)m.rs=3;m.gs=m.gs||{};if(m.mys===undefined)m.mys=genMys();if(m.varL===undefined)m.varL=1;if(m.nem===undefined)pickNem();if(m.lu&&m.luv!==2)m.lu=null;if(m.spv!==3){m.spv=3;m.squad.forEach(function(p){delete p.sp;delete p.sp2;});if(m.sq)Object.keys(m.sq).forEach(function(k){m.sq[k].forEach(function(p){delete p.sp;delete p.sp2;});});}
   fixSp(m.squad);m.squad.forEach(function(p){if(p.c==null)p.c=ri(1,4);});if(m.phase==='season'&&!m.spon&&!m.sponO)m.sponO=genSpon();}
 function scorersHtml(){var m=D.mgr,l=Object.keys(m.gs||{}).map(function(k){return m.gs[k];}).sort(function(a,b){return b[2]-a[2];}).slice(0,8);
@@ -2118,6 +2127,11 @@ var CEV={
   tx:function(m,e){return 'הסוכן של '+pl(e.pid).n+' דורש העלאה בשכר ומרמז שהשחקן יכול לבקש לעזוב.';},
   o:[['לאשר העלאה (€300K)',function(m,e){if(m.bud<300)return 'אין מספיק תקציב.';m.bud-=300;pl(e.pid).f=clamp(pl(e.pid).f+1,-2,2);return pl(e.pid).n+' מרוצה ובכושר מצוין.';}],
      ['לסרב',function(m,e){if(mr()<0.5){pl(e.pid).f=clamp(pl(e.pid).f-2,-2,2);return pl(e.pid).n+' נעלב והכושר שלו ירד.';}return pl(e.pid).n+' הבין ונשאר ממוקד.';}]]},
+ bench:{pick:function(m){var xi={};mySq().xi.forEach(function(x){xi[x.id]=1;});var c=m.squad.filter(function(p){return !xi[p.id]&&!p.inj&&!p.sus&&p.o>=60&&p.a<=32;});return c.length?pickA(c).id:null;},
+  tx:function(m,e){var p=pl(e.pid);return p?p.n+' ('+p.o+') מתלונן שהוא כמעט לא משחק. הוא רוצה הבטחה לדקות, או לעזוב.':'';},
+  o:[['להבטיח לו דקות',function(m,e){var p=pl(e.pid);if(!p)return '';p.pm=3;p.pk=0;return p.n+' קיבל הבטחה: להיות בהרכב לפחות ב-2 מ-3 המשחקים הבאים.';}],
+     ['למכור אותו',function(m,e){var p=pl(e.pid);if(!p)return '';var gks=m.squad.filter(function(z){return z.p==='GK';}).length;if(m.squad.length<=16||(p.p==='GK'&&gks<=2))return 'אי אפשר למכור: חייבים לפחות 16 שחקנים ושני שוערים.';m.bud+=Math.round(valOf(p.o,p.a)*0.8);hofAdd(p);m.squad=m.squad.filter(function(z){return z!==p;});if(m.trainee===p.id)m.trainee=0;return p.n+' נמכר.';}],
+     ['להתעלם',function(m,e){var p=pl(e.pid);if(!p)return '';if(mr()<0.5){p.f=clamp(p.f-2,-2,2);return p.n+' נעלב והכושר שלו ירד.';}return p.n+' קיבל את המצב, בינתיים.';}]]},
  fans:{pick:function(m){return m.last&&m.last.res!=='W'?1:null;},
   tx:function(){return 'האוהדים מתאספים מחוץ לאצטדיון אחרי התוצאה האחרונה ודורשים תשובות.';},
   o:[['לקיים אימון פתוח (€100K)',function(m){m.bud-=100;m.conf=clamp(m.conf+3,0,100);return 'האוהדים התרגשו. האמון עלה.';}],['להתעלם',function(m){m.conf=clamp(m.conf-3,0,100);return 'האוהדים כועסים עוד יותר.';}]]},
@@ -2187,6 +2201,7 @@ function nextEv(){
     if(i>=pr.length)return null;
     return {t:'L',r:ev.r,i:i,h:pr[i][0],a:pr[i][1],home:pr[i][0]===m.team,opp:pr[i][0]===m.team?pr[i][1]:pr[i][0]};}
   if(ev.t==='E'){var eo=euOpp(ev.r);if(!eo)return null;return {t:'E',r:ev.r,i:0,h:eo.home?m.team:eo.id,a:eo.home?eo.id:m.team,home:eo.home,opp:eo.id,leg:eo.p.leg,ph:eo.p.ph,lb:eo.p.lb,l1:m.eu.tie&&m.eu.tie.l1};}
+  if(ev.t==='F'){var fh=ev.r%2===0;return {t:'F',r:ev.r,i:0,h:fh?m.team:300+ev.r,a:fh?300+ev.r:m.team,home:fh,opp:300+ev.r};}
   if(ev.t==='S'){var sp=m.sup;if(!sp||sp.done)return null;return {t:'S',r:0,i:0,h:sp.h,a:sp.a,home:sp.h===m.team,opp:sp.h===m.team?sp.a:sp.h};}
   var ps=m.cup.pairs;for(i=0;i<ps.length;i++)if(ps[i][0]===m.team||ps[i][1]===m.team)break;
   if(i>=ps.length)return null;
@@ -2194,6 +2209,7 @@ function nextEv(){
 }
 function evLabel(ev){var m=D.mgr;
   if(ev.t==='E')return EUN[m.eu.c]+' · '+(ev.lb||(m.eu.pend[ev.r]||{}).lb||'');
+  if(ev.t==='F')return 'משחק הכנה '+(ev.r+1)+' מתוך 4 · '+((m.fr&&m.fr[ev.r])?m.fr[ev.r].c:'');
   if(ev.t==='S')return 'אלוף האלופים';
   if(ev.t==='C')return 'גביע המדינה · '+cupN(ev.r);
   if(ev.r>=26)return 'ליגה · '+(m.grp&&m.grp.top.indexOf(m.team)>=0?'בית עליון':'בית תחתון')+' · מחזור '+(ev.r-25);
@@ -2247,7 +2263,7 @@ function weekly(ev,home){
   inc=Math.round(inc*0.4);
   m.bud+=inc-exp;m.lastFin=[inc,exp];
   if(m.bud<0){var dd=m.bud<-3000?3:1;m.conf=clamp(m.conf-dd,0,100);if(!m.debtN||m.debtN<m.wk-3){m.debtN=m.wk;m.news.unshift('ההנהלה מזהירה: הגירעון הגיע ל-'+fmt(-m.bud)+'. אמון ההנהלה יורד כל שבוע. מכור שחקן או הקטן הוצאות.');}}
-  m.squad.forEach(function(p){if(p.sus>0)p.sus--;if(p.inj>0)p.inj--;p.f=clamp(p.f+ri(-1,1),-2,2);});
+  m.squad.forEach(function(p){if(p.sus>0)p.sus--;if(p.inj>0)p.inj--;p.f=clamp(p.f+ri(-1,1),-2,2);if(p.nt>0)p.nt--;});
   ensureFac();
   (function(){var inX={};xi.forEach(function(x){if(x.id)inX[x.id]=1;});
     if(m.cap&&!m.squad.some(function(z){return z.id===m.cap;}))m.cap=null;
@@ -2258,7 +2274,7 @@ function weekly(ev,home){
     var AC=achList();AC.forEach(function(a){if(!ms.ach[a[0]]&&a[2](m,tr,h,rl,tops)){ms.ach[a[0]]=1;m.news.unshift('🏅 הישג חדש: '+a[1]);}});
     if(h.length>=3&&(tr.l||0)>=2&&!ms.natOff&&ev.t==='L'&&ev.r===5&&mr()<0.6){ms.natOff=1;m.conf=clamp(m.conf+3,0,100);m.news.unshift('📩 התאחדות הכדורגל הציעה לך לאמן את נבחרת ישראל. סירבת בנימוס כי אתה מרוכז במועדון. ההנהלה העריכה את זה (+3 אמון)');}
   })();
-  xi.forEach(function(x){if(x.x||!x.id)return;if(mr()<0.035-m.fac.tc*0.004){var p=m.squad.filter(function(q){return q.id===x.id;})[0];if(p){p.inj=ri(1,5);m.news.unshift('פציעה: '+p.n+' ('+p.inj+' שבועות)');}}});
+  if(ev.t!=='F')xi.forEach(function(x){if(x.x||!x.id)return;if(mr()<0.035-m.fac.tc*0.004){var p=m.squad.filter(function(q){return q.id===x.id;})[0];if(p){p.inj=ri(1,5);m.news.unshift('פציעה: '+p.n+' ('+p.inj+' שבועות)');}}});
   var tp=m.squad.filter(function(p){return p.id===m.trainee;})[0];
   if(tp&&ev.t==='L'){var ch=(tp.a<=24?0.11:tp.a<=29?0.06:0.025)+m.fac.tc*0.012,cap=2+(m.fac.tc>=3?1:0);if(tp.o>=80)ch*=0.4;if(tp.o<88&&(tp.tg||0)<cap&&mr()<ch){tp.tg=(tp.tg||0)+1;tp.o++;tp.w=wgf(tp);m.news.unshift('האימון הצליח: '+tp.n+' משתפר ל-'+tp.o);}}
   if(m.bud<0)m.conf=clamp(m.conf-2,0,100);
@@ -2266,6 +2282,10 @@ function weekly(ev,home){
   if(ev.t==='L'&&(ev.r+1)%4===0){m.mk=genMarket();m.mys=genMys();m.offers=genOffers();m.rs=3;}
   if(!m.evt&&!m.cev&&ev.t==='L'&&mr()<0.2)genCev();
   if(!m.fan&&ev.t==='L'&&mr()<0.3)genFan();
+  if(m.dd&&ev.t==='L'&&m.dd.r<ev.r)m.dd=null;
+  if(ev.t==='L'&&(ev.r===11||ev.r===19)&&!m.dd)genDD(ev);
+  if(ev.t==='L'&&m.tier===1&&(ev.r===5||ev.r===12||ev.r===19))natBreak();
+  if(ev.t==='L'){var xq={};mySq().xi.forEach(function(x){xq[x.id]=1;});m.squad.forEach(function(p){if(p.pm>0){if(xq[p.id])p.pk=(p.pk||0)+1;p.pm--;if(p.pm===0){if((p.pk||0)>=2){p.f=clamp(p.f+1,-2,2);m.news.unshift('😊 '+p.n+' מרוצה: קיבל את הדקות שהבטחת.');}else{p.f=clamp(p.f-2,-2,2);m.news.unshift('😠 '+p.n+' כועס שלא קיימת את ההבטחה לדקות.');}p.pk=0;}}});}
   if(ev.t==='L'&&(ev.r+1)%4===0){
     var sc=m.squad.slice().sort(function(a,b){return b.g-a.g;})[0];
     if(sc&&sc.g>=3)m.news.unshift('⭐ שחקן החודש בקבוצה: '+sc.n+' ('+sc.g+' שערים העונה)');
@@ -2281,6 +2301,14 @@ function weekly(ev,home){
   m.squad.forEach(function(p){if(p.g>=10&&p.g%10===0&&p.ml!==p.g){p.ml=p.g;m.news.unshift('🎯 '+p.n+' הגיע ל-'+p.g+' שערים העונה!');}});
   if(m.news.length>10)m.news.length=10;
 }
+function natBreak(){var m=D.mgr,c=m.squad.filter(function(p){return p.o>=68&&p.a<=35&&!p.inj;}).sort(function(a,b){return b.o-a.o;}).slice(0,3),nm=[];
+  c.forEach(function(p){p.nt=1;p.cp=(p.cp||0)+1;nm.push(p.n);var r=mr();if(r<0.2){p.inj=ri(1,3);m.news.unshift('🤕 '+p.n+' נפצע בנבחרת ויחמיץ '+p.inj+' משחקים');}else if(r<0.7)p.f=clamp(p.f+1,-2,2);});
+  if(nm.length)m.news.unshift('🌍 פגרת נבחרות: '+nm.join(', ')+' נקראו לנבחרת ויחסרו במשחק הקרוב');}
+function genDD(ev){var m=D.mgr,st=m.squad.filter(function(p){return p.o>=66;}).sort(function(a,b){return b.o-a.o;}).slice(0,5);
+  if(mr()<0.55&&st.length){var p=pickA(st),cl=pickA(m.t1.filter(function(x){return x!==m.team;}));m.dd={t:'o',r:ev.r,pid:p.id,cl:cl,pr:Math.round(valOf(p.o,p.a)*(1.15+mr()*0.35)/10)*10};}
+  else{var top=m.squad.slice().sort(function(a,b){return b.o-a.o;}),av=top.slice(0,8).reduce(function(s,p){return s+p.o;},0)/Math.max(1,Math.min(8,top.length)),y=newP(mr,['DF','MF','FW'][ri(0,2)],clamp(Math.round(av+ri(-4,-1)),55,85),ri(23,30));y.c=3;y.w=wgf(y);m.dd={t:'b',r:ev.r,pl:y,pr:Math.round(valOf(y.o,y.a)*0.7/10)*10};}
+  m.news.unshift('🔔 יום הדד-ליין בחלון ההעברות! יש הצעה חמה בלשונית בית');}
+function hofAdd(p){var m=D.mgr,ms=D.mgs=D.mgs||{};ms.hof=ms.hof||[];if((p.ys||0)>=3&&((p.ti||0)>=1||(p.cg||0)>=25)&&!ms.hof.some(function(h){return h.n===p.n&&h.t===TT(m.team)[0];})){ms.hof.push({n:p.n,t:TT(m.team)[0],ys:p.ys,cg:p.cg||0,ti:p.ti||0,o:p.o});if(ms.hof.length>30)ms.hof.shift();}}
 function cupIn(){var m=D.mgr;return m.cup.pairs.some(function(p){return p[0]===m.team||p[1]===m.team;});}
 function afterEvent(ev){
   var m=D.mgr;m.wk++;
@@ -2311,7 +2339,7 @@ function userMatch(ev,fkG,played,plan){
   var mine=og+(played?fkG:0),them=tg,pens=null,win;
   var sc=plan.sc.slice(),tk=taker(),i,p;
   if(played)(plan.fkSc||[]).forEach(function(id){sc.push(id);});
-  sc.forEach(function(id){var q=m.squad.filter(function(z){return z.id===id;})[0];if(q){q.g++;gsAdd(m.team,q.n,1);}});
+  if(ev.t!=='F')sc.forEach(function(id){var q=m.squad.filter(function(z){return z.id===id;})[0];if(q){q.g++;q.cg=(q.cg||0)+1;if(q.bn==='g')m.bud-=30;gsAdd(m.team,q.n,1);}});
   var aggM=mine,aggT=them;if(ev.t==='E'&&ev.leg===2&&ev.l1){aggM+=ev.l1[0];aggT+=ev.l1[1];}
   var et=null,etx=function(){var x=pois(expG(me,op,ev.home,1,17)*0.25),y=pois(expG(op,me,!ev.home,1,17)*0.25);mine+=x;them+=y;aggM+=x;aggT+=y;et=[x,y];};
   if((ev.t==='C'||ev.t==='S')&&mine===them){etx();if(mine===them){pens=penWin(m.team,ev.opp);win=pens;}else win=mine>them;}
@@ -2326,6 +2354,7 @@ function userMatch(ev,fkG,played,plan){
   /* commit */
   if(ev.t==='L'){var hg=ev.home?mine:them,ag=ev.home?them:mine;m.res[ev.r][ev.i]=[hg,ag];addRes(ev.h,ev.a,hg,ag);simRest(ev.r,ev.i);}
   else if(ev.t==='E'){euCommit(ev,mine,them,win,r);}
+  else if(ev.t==='F'){m.fr[ev.r].g=[mine,them];m.bud+=60;m.news.unshift('ידידות: '+line.split(': ')[1]);}
   else if(ev.t==='S'){var swid=win?m.team:ev.opp;m.sup={h:ev.h,a:ev.a,g:[ev.home?mine:them,ev.home?them:mine],w:swid,done:true,pn:pens!==null};
     if(win){m.bud+=300;m.conf=clamp(m.conf+8,0,100);m.tr.s=(m.tr.s||0)+1;D.coins+=60;m.news.unshift('🏆 זכית באלוף האלופים! +€300K');}else m.news.unshift('הפסדת באלוף האלופים.');}
   else{
@@ -2335,6 +2364,7 @@ function userMatch(ev,fkG,played,plan){
     if(m.cup.done&&m.cup.won){m.cup.out='זכית בגביע!';}
   }
   var mulD=derby?2:1,up=ovrT(op)-ovrT(me)>4,dc=win?((ev.t==='C'||ev.t==='S')?2:4)+(up?2:0):(res==='D'?(up?1:-1):((ev.t==='C'||ev.t==='S')?-3:(up?-2:-4)));
+  if(ev.t==='F')dc=0;
   m.conf=clamp(m.conf+dc*mulD,0,100);
   m.lw=win;m.press=null;
   weekly(ev,ev.home);
@@ -2348,11 +2378,12 @@ function userMatch(ev,fkG,played,plan){
     if(res==='W'){m.conf=clamp(m.conf+3,0,100);m.bud+=100;m.news.unshift('ניצחת את '+coachOf(m.nem.id)+', היריב הגדול שלך! +€100K');}else if(res==='L')m.conf=clamp(m.conf-1,0,100);}
   if(m.fan){var inX=sq.xi.some(function(z){return z.id===m.fan.id;});m.conf=clamp(m.conf+(inX?3:-2),0,100);if(inX)m.news.unshift('האוהדים אהבו שנתת הזדמנות לשחקן שביקשו.');m.fan=null;}
   r.tw=mkTweets(r);
-  m.ivFb=null;m.iv=genIv(r,plan,ovrT(me)-ovrT(op)>3,ovrT(op)-ovrT(me)>4,derby);
+  m.ivFb=null;m.iv=ev.t==='F'?null:genIv(r,plan,ovrT(me)-ovrT(op)>3,ovrT(op)-ovrT(me)>4,derby);
   (function(){var gd=Math.abs(mine-them),sc2=(ev.home?mine:them)+'–'+(ev.home?them:mine),cnt={};r.scorers.forEach(function(n){cnt[n]=(cnt[n]||0)+1;});
     if(res==='W'&&gd>=3)art('win',{big:1,sc:sc2,opp:ev.opp,motm:r.motm});else if(res==='L'&&gd>=3)art('loss',{big:1,sc:sc2,opp:ev.opp});else if((ev.t!=='L'||derby)&&res==='W')art('win',{sc:sc2,opp:ev.opp,motm:r.motm});else if(res==='L'&&derby)art('loss',{sc:sc2,opp:ev.opp});
     Object.keys(cnt).forEach(function(n){if(cnt[n]>=3)art('hat',{n:n});});
     (plan.E||[]).forEach(function(e){if(e.t==='card'&&e.me&&e.red)art('red',{n:e.who});});})();
+  r.ref=plan.rf?plan.rf[0]+(plan.rf[1]>=1.4?' (קשוח)':plan.rf[1]<=0.7?' (מקל)':''):'';r.wxn=plan.wx||'';
   r.fe=(plan.E||[]).filter(function(e){return e.t!=='fk';}).map(function(e){return {m:e.m,t:e.t,me:e.me,who:e.who||'',as:e.as||'',gk:e.gk||'',red:e.red};});
   r.hl=(plan.E||[]).filter(function(e){return e.t==='goal'||e.t==='card';}).sort(function(a,b){return a.m-b.m;}).map(function(e){return {m:e.m,t:e.t,me:e.me,who:e.who,as:e.as||'',red:e.red};});
   if(played)(plan.fkSc||[]).forEach(function(id){var q=m.squad.filter(function(z){return z.id===id;})[0];if(q)r.hl.push({m:90,t:'goal',me:1,who:q.n,as:'בעיטה חופשית'});});
@@ -2381,6 +2412,7 @@ function endSeason(){
   var prize=m.tier===1?[6000,4200,3200,2400,2000,1700,1200,1000,900,800,700,600,500,400][pos-1]:[2500,1800,1200,1000,900,800,700,600,500,450,400,350,300,250][pos-1];
   prize=Math.round(prize*0.28);var cupBonus=m.cup.won?500:0,lines=[],coin=0;
   m.bud+=prize+cupBonus;
+  if(m.spon){var sb=0;if(m.spon.tb&&m.tier===1&&pos===1)sb+=m.spon.tb;if(m.spon.tc&&m.cup.won)sb+=m.spon.tc;if(m.spon.te&&m.tier===1&&pos<=4)sb+=m.spon.te;if(sb){m.bud+=sb;m.sponBonus=sb;}}
   m.lastPos=pos;var ok=pos<=m.obj.pos,close=pos<=m.obj.pos+2;
   m.conf=clamp(m.conf+(ok?(pos<=m.obj.pos-2?35:25):close?-8:-30)+(m.cup.won?8:0),0,100);
   var verdict=ok?'ההנהלה מרוצה: עמדת ביעד.':(close?'ההנהלה מאוכזבת: פספסת את היעד בכמעט.':'ההנהלה זועמת: רחוק מהיעד.');
@@ -2389,6 +2421,8 @@ function endSeason(){
   if(m.cup.won){D.mgs.cups++;m.tr.c++;coin+=150;lines.push(['זכייה בגביע המדינה','+150 מטבעות']);}
   var gl=Object.keys(m.gs||{}).map(function(k){return m.gs[k];}).sort(function(a,b){return b[2]-a[2];})[0];
   if(gl){lines.push(['מלך השערים: '+gl[0]+' ('+TT(gl[1])[0]+')',gl[2]+' שערים']);if(gl[1]===m.team){coin+=100;lines.push(['שחקן שלך מלך השערים','+100 מטבעות']);}}
+  (function(){var ti=(m.tier===1&&pos===1)||m.cup.won;if(ti){m.squad.forEach(function(p){p.ti=(p.ti||0)+1;});var bt=m.squad.filter(function(p){return p.bn==='t';}).length*200;if(bt){m.bud-=bt;lines.push(['בונוסי תארים לשחקנים','-'+fmt(bt)]);}}})();
+  if(m.sponBonus){lines.push(['בונוס מנותן החסות '+m.spon.n,'+'+fmt(m.sponBonus)]);m.sponBonus=0;}
   if(tb[0])lines.push(['ממוצע נקודות למשחק',(tb[6]/tb[0]).toFixed(2)]);
   lines.push(['הפרש שערים בעונה',(tb[4]-tb[5]>0?'+':'')+(tb[4]-tb[5])]);
   var bp=m.squad.slice().sort(function(a,b){return b.g-a.g;})[0];if(bp&&bp.g>0)lines.push(['הכוכב שלך: '+bp.n,bp.g+' שערים']);
@@ -2443,18 +2477,24 @@ function newSeason(){
     while(L.length>26){var w=L.slice().sort(function(a,b){return a.o-b.o;})[0];L.splice(L.indexOf(w),1);}
   });
   delete m.sq[m.team];
-  var left=[];
+  var left=[],mtMsg='';
   m.squad=m.squad.filter(function(p){
     p.a++;var d=(p.a<=22?ri(0,3):p.a<=26?ri(-1,2):p.a<=30?ri(-2,1):p.a<=33?ri(-3,0):ri(-4,-1))+(p.wk&&p.a<=23?ri(1,3):0);
-    p.o=clamp(p.o+gD(p,d),35,92);p.w=wgf(p);p.f=0;p.inj=0;p.tg=0;p.c=(p.c==null?3:p.c)-1;
-    if(p.c<=0){left.push(p.n);return false;}return !(p.a>=37||(p.a>=34&&mr()<0.35));
+    var mo0=p.o,mb=(m.mt&&m.mt.t===p.id&&m.squad.some(function(z){return z.id===m.mt.m;}))?ri(1,2):0;d+=mb+((p.pt&&p.o<p.pt&&p.a<=23)?1:0);
+    p.ys=(p.ys||0)+1;p.o=clamp(p.o+gD(p,d),35,92);p.w=wgf(p);p.f=0;p.inj=0;p.tg=0;p.c=(p.c==null?3:p.c)-1;if(mb&&p.o>mo0)mtMsg='בזכות המנטור התפתח '+p.n+' (+'+(p.o-mo0)+').';
+    var rt=p.a>=37||(p.a>=34&&mr()<0.35);if(p.c<=0){left.push(p.n);hofAdd(p);return false;}if(rt)hofAdd(p);return !rt;
   });
-  var wkn='',n=1+m.fac.yo,i,avg=m.squad.reduce(function(s,p){return s+p.o;},0)/Math.max(1,m.squad.length);
-  for(i=0;i<n;i++){var y=newP(mr,['GK','DF','MF','FW'][ri(0,3)],48+m.fac.yo*3+ri(-3,8),ri(17,19));y.c=3;if(mr()<0.1+0.03*m.fac.yo){y.wk=1;y.o=clamp(y.o+6,40,72);wkn=y.n;}y.w=wgf(y);y.o=clamp(y.o,40,72);y.w=wgf(y);m.squad.push(y);}
+  if(m.mt){var te=m.squad.filter(function(z){return z.id===m.mt.t;})[0],mo=m.squad.filter(function(z){return z.id===m.mt.m;})[0];if(!te||!mo||te.a>23)m.mt=null;}
+  var wkn='',n=1+m.fac.yo,i,avg=m.squad.reduce(function(s,p){return s+p.o;},0)/Math.max(1,m.squad.length),acLeft=[];
+  m.ac=(m.ac||[]).filter(function(p){p.a++;p.o=clamp(p.o+Math.min(Math.max(0,(p.pt||p.o)-p.o),ri(2,5)),35,80);p.w=wgf(p);if(p.a>=20){acLeft.push(p.n);return false;}return true;});
+  for(i=0;i<n;i++){var y=newP(mr,['GK','DF','MF','FW'][ri(0,3)],46+m.fac.yo*3+ri(-3,6),ri(16,18));y.c=3;y.o=clamp(y.o,38,62);y.pt=clamp(y.o+ri(10,24)+m.fac.yo,55,84);if(mr()<0.1+0.03*m.fac.yo){y.wk=1;y.pt=clamp(y.pt+8,60,90);wkn=y.n;}y.w=wgf(y);m.ac.push(y);}
+  while(m.ac.length>8){var wa=m.ac.slice().sort(function(a,b){return (a.pt+a.o)-(b.pt+b.o);})[0];m.ac.splice(m.ac.indexOf(wa),1);}
   while(m.squad.length<18)m.squad.push(newP(mr,['DF','MF','FW'][ri(0,2)],avg-4,ri(19,30)));
   while(m.squad.filter(function(p){return p.p==='GK';}).length<2)m.squad.push(newP(mr,'GK',avg-4,ri(19,30)));
   m.news=['עונה חדשה '+m.season+'/'+String((m.season+1)%100).padStart(2,'0')+'. בהצלחה!'];
-  if(wkn)m.news.push('כישרון נדיר עלה מהנוער: '+wkn+' ✨');
+  m.news.push('באקדמיית הנוער יש '+m.ac.length+' שחקנים. בלשונית מועדון תחליט מי עולה לסגל.');if(wkn)m.news.push('כישרון נדיר באקדמיה: '+wkn+' ✨');
+  if(acLeft.length)m.news.push('עזבו את האקדמיה (גיל 20): '+acLeft.join(', '));
+  if(mtMsg)m.news.push(mtMsg);
   if(left.length)m.news.push('סיימו חוזה ועזבו: '+left.join(', '));
   m.evt=null;m.cev=null;m.tk=0;if(m.trainee&&!m.squad.some(function(p){return p.id===m.trainee;}))m.trainee=0;
   startSeason();save();
@@ -2566,16 +2606,17 @@ function tabHome(){
     if(kp)h+='<p class="desc">שחקן המפתח של היריב: '+esc(kp.n)+' ('+kp.o+')</p>';
     var wp=winProb(ev);h+='<div class="rsum" style="margin:6px 0"><span>ניצחון <b style="color:#3ddc84">'+wp[0]+'%</b></span><span>תיקו <b style="color:#f5c542">'+wp[1]+'%</b></span><span>הפסד <b style="color:#ff5a5a">'+wp[2]+'%</b></span></div><p class="desc" style="margin:0">יחס כוחות: אתה '+Math.round(ovrT(mySq().r))+' מול '+Math.round(ovrT(teamR(ev.opp)))+' של היריב (הערכת סיכויים לפי סגל, מערך ומורל)</p>';
     h+='<p class="sub">נאום לפני המשחק</p><div class="seg">'+[['push','לתקוף!'],['calm','לשמור על קור רוח'],['motiv','להתעלות']].map(function(t){return '<button type="button" data-a="talk" data-v="'+t[0]+'" aria-pressed="'+(m.talk===t[0]?'true':'false')+'">'+t[1]+'</button>';}).join('')+'</div>';
-    h+=ctrl('play',undefined,'צפה ושחק · '+n+' בעיטות חופשיות')+ctrl('sim',undefined,'הדמה מהירה','alt')+ctrl('sim5',undefined,'הדמת 5 משחקים','alt');
+    h+=ctrl('play',undefined,'צפה ושחק · '+n+' בעיטות חופשיות')+ctrl('sim',undefined,'הדמה מהירה','alt')+ctrl('simS',undefined,mgArm==='simS'?'בטוח? לחץ שוב להרצת כל העונה':'הרץ עונה','alt');
     h+='<p class="desc">השערים שתבקיע מהבעיטות מצטרפים לתוצאה, מעל המשחק עצמו שמדומה לפי הסגל והטקטיקה.</p>';
   }
   if(m.arts&&m.arts.length){h+='<p class="sub">📰 כתבות</p>'+m.arts.slice(0,3).map(function(a){return '<div class="card"><b>'+esc(a.h)+'</b><span style="color:var(--chalk)">'+esc(a.b)+'</span></div>';}).join('');}
   var ev2=evtView();if(m.evt&&!ev2)m.evt=null;
   if(ev2){h+='<p class="sub">אירוע במועדון</p><p class="desc" style="color:var(--chalk)">'+esc(ev2.t)+'</p><div style="display:flex;gap:6px;flex-wrap:wrap">'+ev2.o.map(function(o,i){return ctrl('evt',i,esc(o),'alt sm');}).join('')+'</div>';}
   if(m.sponO&&!m.spon){h+='<p class="sub">נותני חסות לעונה</p><p class="desc">בחר אחד. אי אפשר לשנות עד סוף העונה.</p>';
-    m.sponO.forEach(function(s,i){h+='<div class="mode" style="cursor:default;flex-direction:row;justify-content:space-between;align-items:center"><span style="color:var(--chalk);font-size:15px">'+esc(s.n)+' · '+s.t+'<br><small style="color:var(--muted)">'+fmt(s.b)+' לכל מחזור'+(s.w?' + '+fmt(s.w)+' על כל ניצחון':'')+'</small></span>'+ctrl('spon',i,'חתום','sm')+'</div>';});}
+    m.sponO.forEach(function(s,i){h+='<div class="mode" style="cursor:default;flex-direction:row;justify-content:space-between;align-items:center"><span style="color:var(--chalk);font-size:15px">'+esc(s.n)+' · '+s.t+'<br><small style="color:var(--muted)">'+fmt(s.b)+' לכל מחזור'+(s.w?' + '+fmt(s.w)+' על כל ניצחון':'')+(s.tb?'<br>בונוס אליפות '+fmt(s.tb)+' · זכייה בגביע '+fmt(s.tc):'')+(s.te?'<br>בונוס '+fmt(s.te)+' על העפלה לאירופה':'')+'</small></span>'+ctrl('spon',i,'חתום','sm')+'</div>';});}
   if(m.cev&&CEV[m.cev.k]){var T=CEV[m.cev.k];if(m.cev.pid&&!pl(m.cev.pid))m.cev=null;
     if(m.cev)h+='<div class="card ev"><b>⚡ אירוע במועדון</b><span style="color:var(--chalk)">'+esc(T.tx(m,m.cev))+'</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+T.o.map(function(o,i){return ctrl('cev',i,o[0],i?'alt sm':'sm');}).join('')+'</div></div>';}
+  if(m.dd){var ddp=m.dd.t==='o'?pl(m.dd.pid):m.dd.pl;if(!ddp)m.dd=null;else h+='<div class="card ev"><b>🔔 יום הדד-ליין</b><span style="color:var(--chalk)">'+(m.dd.t==='o'?esc(TT(m.dd.cl)[0])+' מציעה '+fmt(m.dd.pr)+' על '+esc(ddp.n)+' ('+ddp.o+').':'שחקן פנוי: '+esc(ddp.n)+' ('+plab(ddp)+', '+ddp.o+', גיל '+ddp.a+') במחיר מוזל של '+fmt(m.dd.pr)+'.')+' ההצעה תפוג אחרי המשחק הבא.</span><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+ctrl('ddy',undefined,m.dd.t==='o'?'מכור':'קנה','sm',m.dd.t==='b'&&(m.bud<m.dd.pr||m.squad.length>=30))+ctrl('ddn',undefined,m.dd.t==='o'?'סרב':'לוותר','alt sm')+'</div></div>';}
   if(m.fan){var fp=pl(m.fan.id);if(!fp)m.fan=null;else h+='<div class="card"><b>📣 דרישת האוהדים</b><span>האוהדים רוצים לראות את '+esc(fp.n)+' בהרכב. הם יזכרו אם תתעלם.</span></div>';}
   if(m.chal)h+='<div class="card"><b>🎯 אתגר ההנהלה</b><span>נצח עוד '+m.chal.left+' משחקים ברצף וקבל '+fmt(m.chal.rew)+'.</span></div>';
   var hurt=m.squad.filter(function(p){return p.inj>0;});
@@ -2609,6 +2650,7 @@ function tabFx(){
     if(ev.t==='L'){pr=m.fx[ev.r];for(j=0;j<pr.length;j++)if(pr[j][0]===m.team||pr[j][1]===m.team)break;
       if(j<pr.length)rows.push({lb:(i===m.wk?'הבא · ':'')+'ליגה מחזור '+(ev.r+1),h:pr[j][0],a:pr[j][1],n:i===m.wk});}
     else if(ev.t==='E'){var pe=m.eu&&m.eu.pend?m.eu.pend[ev.r]:null;if(!pe||pe.done||!m.eu.alive)continue;var eo={id:100+pe.opp,home:pe.home};rows.push({lb:(i===m.wk?'הבא · ':'')+EUN[m.eu.c]+' · '+pe.lb,h:eo.home?m.team:eo.id,a:eo.home?eo.id:m.team,n:i===m.wk});}
+    else if(ev.t==='F'&&m.fr&&m.fr[ev.r]){var fh2=ev.r%2===0;rows.push({lb:(i===m.wk?'הבא · ':'')+'משחק הכנה · '+m.fr[ev.r].c,h:fh2?m.team:300+ev.r,a:fh2?300+ev.r:m.team,n:i===m.wk});}
     else if(ev.t==='S'&&m.sup&&!m.sup.done)rows.push({lb:(i===m.wk?'הבא · ':'')+'אלוף האלופים',h:m.sup.h,a:m.sup.a,n:i===m.wk});
     else if(ev.t==='C')rows.push({lb:(i===m.wk?'הבא · ':'')+'גביע · '+cupN(ev.r),h:null,a:null,n:i===m.wk});}
   if(!rows.length)return h+'<p class="desc">אין משחקים נוספים העונה.</p>';
@@ -2623,10 +2665,10 @@ function tabSq(){
   if(sel){
     h+='<div class="mode" style="cursor:default"><b>'+esc(sel.n)+'</b><span>'+plab(sel)+' · דירוג '+sel.o+' · גיל '+sel.a+' · בעיטות חופשיות '+sel.fk+' · שכר '+sel.w+'K בשבוע · חוזה עד '+(m.season+sel.c-1)+'/'+String((m.season+sel.c)%100).padStart(2,'0')+(trOf(sel)?' · אופי: '+TRL[trOf(sel)]:'')+(sel.fkg?' · שערי חופשית: '+sel.fkg:'')+' · שווי '+fmt(valOf(sel.o,sel.a))+'</span>'+
       '<input class="inp" id="mgName" maxlength="16" value="'+esc(sel.n)+'" autocomplete="off" style="margin-top:6px">'+
-      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+ctrl('rename',undefined,'שמור שם','alt sm')+ctrl('train',sel.id,m.trainee===sel.id?'באימון אישי':'אימון אישי','alt sm',m.trainee===sel.id)+ctrl('tk',sel.id,m.tk===sel.id?'בועט חופשיות ✓':'מנה לבועט חופשיות','alt sm')+(sel.c<=2?ctrl('renew',sel.id,'הארך חוזה '+fmt(renewCost(sel)),'alt sm',m.bud<renewCost(sel)):'')+ctrl('sell',sel.id,'מכור '+fmt(Math.round(valOf(sel.o,sel.a)*0.7)),'alt sm')+'</div></div>';
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+ctrl('rename',undefined,'שמור שם','alt sm')+ctrl('train',sel.id,m.trainee===sel.id?'באימון אישי':'אימון אישי','alt sm',m.trainee===sel.id)+ctrl('tk',sel.id,m.tk===sel.id?'בועט חופשיות ✓':'מנה לבועט חופשיות','alt sm')+(sel.c<=2?ctrl('renew',sel.id,'הארך חוזה '+fmt(renewCost(sel)),'alt sm',m.bud<renewCost(sel))+ctrl('renew',sel.id+':g','בונוס שערים '+fmt(Math.round(renewCost(sel)*0.6)),'alt sm',m.bud<renewCost(sel)*0.6)+ctrl('renew',sel.id+':t','בונוס תארים '+fmt(Math.round(renewCost(sel)*0.5)),'alt sm',m.bud<renewCost(sel)*0.5):'')+ctrl('sell',sel.id,'מכור '+fmt(Math.round(valOf(sel.o,sel.a)*0.7)),'alt sm')+'</div></div>';
   }
   list.forEach(function(p){
-    h+='<button class="mode" type="button" data-a="pick" data-v="'+p.id+'" style="padding:8px 14px;flex-direction:row;justify-content:space-between;align-items:center;'+(p.id===mgSel?'outline:2px solid var(--amber)':'')+'"><span style="color:var(--chalk);font-size:15px">'+esc(p.n)+(p.wk?' ✨':'')+' '+mface(p.f)+' <small style="color:var(--muted)">'+plab(p)+(p.inj?' · פצוע '+p.inj:'')+(p.sus?' · מושעה '+p.sus:'')+(p.g?' · ⚽'+p.g:'')+(p.c<=1?' · חוזה מסתיים':'')+(m.tk===p.id?' · בועט':'')+'</small></span><b style="font-size:18px">'+(p.f>0?'<i style="color:#6fdc8c">▲</i> ':p.f<0?'<i style="color:#ff7a7a">▼</i> ':'')+p.o+'</b></button>';
+    h+='<button class="mode" type="button" data-a="pick" data-v="'+p.id+'" style="padding:8px 14px;flex-direction:row;justify-content:space-between;align-items:center;'+(p.id===mgSel?'outline:2px solid var(--amber)':'')+'"><span style="color:var(--chalk);font-size:15px">'+esc(p.n)+(p.wk?' ✨':'')+' '+mface(p.f)+' <small style="color:var(--muted)">'+plab(p)+(p.inj?' · פצוע '+p.inj:'')+(p.nt?' · בנבחרת':'')+(p.sus?' · מושעה '+p.sus:'')+(p.bn==='g'?' · חוזה בונוס שערים':p.bn==='t'?' · חוזה בונוס תארים':'')+(p.g?' · ⚽'+p.g:'')+(p.c<=1?' · חוזה מסתיים':'')+(m.tk===p.id?' · בועט':'')+'</small></span><b style="font-size:18px">'+(p.f>0?'<i style="color:#6fdc8c">▲</i> ':p.f<0?'<i style="color:#ff7a7a">▼</i> ':'')+p.o+'</b></button>';
   });
   return h;
 }
@@ -2679,10 +2721,10 @@ function tabXi(){
     return h;}
   var cx=sq.xi[sel],csp=sl[sel][0],cp=cx.id?m.squad.filter(function(z){return z.id===cx.id;})[0]:null;
   h+='<div class="card"><b>'+SPL[csp]+' · '+csp+'</b><span>'+(cp?esc(cp.n)+' · טבעי: '+plab(cp)+' · '+(cx.pen?cp.o+' ← '+cx.o+' בעמדה הזו':cp.o):'העמדה ריקה')+'</span><span>לחץ על שחקן אחר במגרש להחלפה ביניהם, או בחר מהספסל:</span></div>';
-  var bench=m.squad.filter(function(p){return !inX[p.id];}).map(function(p){ensureSp(p);var pen=pen2(p,csp);return {p:p,pen:pen,v:p.o+p.f-pen,bad:p.inj||p.sus};});
+  var bench=m.squad.filter(function(p){return !inX[p.id];}).map(function(p){ensureSp(p);var pen=pen2(p,csp);return {p:p,pen:pen,v:p.o+p.f-pen,bad:p.inj||p.sus||p.nt};});
   bench.sort(function(a,b){return (a.bad?1:0)-(b.bad?1:0)||b.v-a.v;});
   bench.forEach(function(r){var p=r.p,cls=r.bad?'':(r.pen<=1?'ok':r.pen<=5?'near':'far');
-    h+='<button class="mode bn '+cls+'" type="button" data-a="bench" data-v="'+p.id+'"'+(r.bad?' disabled':'')+'><span style="color:var(--chalk);font-size:15px">'+esc(p.n)+(p.wk?' ✨':'')+' '+mface(p.f)+' <small style="color:var(--muted)">'+plab(p)+(trOf(p)?' · '+TRL[trOf(p)]:'')+(p.inj?' · פצוע':'')+(p.sus?' · מושעה':'')+'</small></span><b>'+(r.pen?'<small>'+p.o+' ←</small> ':'')+(p.o-r.pen)+(r.bad?'':(r.pen<=1?' <em class="tg ok">'+(r.pen===0?'מתאים':'משני')+'</em>':r.pen<=5?' <em class="tg near">אפשרי</em>':' <em class="tg far">לא מתאים</em>'))+'</b></button>';});
+    h+='<button class="mode bn '+cls+'" type="button" data-a="bench" data-v="'+p.id+'"'+(r.bad?' disabled':'')+'><span style="color:var(--chalk);font-size:15px">'+esc(p.n)+(p.wk?' ✨':'')+' '+mface(p.f)+' <small style="color:var(--muted)">'+plab(p)+(trOf(p)?' · '+TRL[trOf(p)]:'')+(p.inj?' · פצוע':'')+(p.nt?' · בנבחרת':'')+(p.sus?' · מושעה':'')+'</small></span><b>'+(r.pen?'<small>'+p.o+' ←</small> ':'')+(p.o-r.pen)+(r.bad?'':(r.pen<=1?' <em class="tg ok">'+(r.pen===0?'מתאים':'משני')+'</em>':r.pen<=5?' <em class="tg near">אפשרי</em>':' <em class="tg far">לא מתאים</em>'))+'</b></button>';});
   return h;
 }
 function fatP(p){return 0;}
@@ -2725,8 +2767,13 @@ function tabClub(){
     h+='<p class="sub">קפטן הקבוצה</p><div class="line"><span>'+(cp?esc(cp.n)+(trOf(cp)==='leader'?' (מנהיג)':''):'לא נבחר')+'</span></div><div style="display:flex;gap:6px;flex-wrap:wrap">';
     m.squad.slice().sort(function(a,b){return (trOf(b)==='leader'?4:0)+b.o-(trOf(a)==='leader'?4:0)-a.o;}).slice(0,6).forEach(function(p){if(p.id!==m.cap)h+=ctrl('cap',p.id,esc(p.n),'alt sm');});
     h+='</div>';
+    h+=acHtml();
     var ms=D.mgs=D.mgs||{},AC=achList(),got=AC.filter(function(a){return ms.ach&&ms.ach[a[0]];}).length;
     h+='<p class="sub">🏅 הישגים ('+got+'/'+AC.length+')</p>';AC.forEach(function(a){h+='<div class="line"><span>'+(ms.ach&&ms.ach[a[0]]?'✅ ':'🔒 ')+a[1]+'</span></div>';});
+    var hf=(ms.hof||[]).slice().sort(function(a,b){return (b.ys*2+b.ti*5+b.cg/5)-(a.ys*2+a.ti*5+a.cg/5);}).slice(0,8);
+    h+='<p class="sub">🏛️ היכל התהילה</p>';
+    if(hf.length)hf.forEach(function(x){h+='<div class="line"><span>'+esc(x.n)+' <small style="color:var(--muted)">'+esc(x.t)+' · '+x.ys+' עונות · '+x.cg+' שערים · '+x.ti+' תארים</small></span></div>';});
+    else h+='<p class="desc">שחקן נכנס להיכל אחרי שעזב או פרש, אם שיחק אצלך לפחות 3 עונות וזכה בתואר או הבקיע 25 שערים.</p>';
     var at=ms.at||{},tl=Object.keys(at).sort(function(a,b){return at[b]-at[a];}).slice(0,5);
     if(tl.length){h+='<p class="sub">מלכי שערים של כל הזמנים</p>';tl.forEach(function(n){h+='<div class="line"><span>'+esc(n)+'</span><b>'+at[n]+'</b></div>';});}
     var bs=(m.hist||[]).filter(function(x){return !x.fired;}).sort(function(a,b){return (a.tier-b.tier)||(a.pos-b.pos);}).slice(0,3);
@@ -2740,9 +2787,22 @@ function tabClub(){
   h+=ctrl('reset',undefined,mgArm==='reset'?'בטוח? לחץ שוב למחיקת הקריירה':'קריירה חדשה','alt sm');
   return h;
 }
+function acHtml(){
+  var m=D.mgr,h='',ac=m.ac||[];
+  h+='<p class="sub">🎓 אקדמיית הנוער</p><p class="desc">כל עונה מגיעים שחקני נוער חדשים. אפשר לקדם אותם לסגל בחינם, או להשאיר באקדמיה שיתפתחו. בגיל 20 הם עוזבים.</p>';
+  if(!ac.length)h+='<div class="line"><span>האקדמיה ריקה. שחקנים חדשים יגיעו בעונה הבאה.</span></div>';
+  ac.forEach(function(p){h+='<div class="mode" style="cursor:default;flex-direction:row;justify-content:space-between;align-items:center;gap:6px"><span style="color:var(--chalk);font-size:15px">'+esc(p.n)+(p.wk?' ✨':'')+'<br><small style="color:var(--muted)">'+plab(p)+' · גיל '+p.a+' · דירוג '+p.o+' · פוטנציאל '+mStars(p.pt)+'</small></span><span style="display:flex;gap:6px">'+ctrl('acp',p.id,'קדם','sm')+ctrl('acx',p.id,'שחרר','alt sm')+'</span></div>';});
+  h+='<p class="sub">🧓 מנטור</p><p class="desc">שחקן ותיק (29+) באותה עמדה מלמד שחקן צעיר (עד 23). הצעיר מתפתח מהר יותר בסוף העונה.</p>';
+  var mt=m.mt,te=mt&&m.squad.filter(function(z){return z.id===mt.t;})[0],mo=mt&&m.squad.filter(function(z){return z.id===mt.m;})[0];
+  if(te&&mo)h+='<div class="line"><span>'+esc(mo.n)+' ← מנטור של '+esc(te.n)+'</span>'+ctrl('mtx',undefined,'בטל','alt sm')+'</div>';
+  else{var yg=m.squad.filter(function(p){return p.a<=23;}).sort(function(a,b){return (b.wk?1:0)-(a.wk?1:0)||b.o-a.o;}).slice(0,4);
+    if(!yg.length)h+='<div class="line"><span>אין כרגע שחקנים צעירים בסגל.</span></div>';
+    yg.forEach(function(p){h+='<div class="line"><span>'+esc(p.n)+' · '+plab(p)+' · גיל '+p.a+'</span>'+ctrl('mt',p.id,'שייך מנטור','sm')+'</div>';});}
+  return h;
+}
 function mcard(r){
   var m=D.mgr,ev=r.ev,hg=ev.home?r.mine:r.them,ag=ev.home?r.them:r.mine,col={W:'#3ddc84',D:'#f5c542',L:'#ff5a5a'}[r.res];
-  var h='<div class="rc" style="border-inline-start:4px solid '+col+'"><small class="rl2">'+esc(evLabel(ev))+(r.derby?' · דרבי':'')+'</small>'+
+  var h='<div class="rc" style="border-inline-start:4px solid '+col+'"><small class="rl2">'+esc(evLabel(ev))+(r.derby?' · דרבי':'')+'</small>'+(r.ref?'<small class="rl2" style="display:block;opacity:.75">שופט: '+esc(r.ref)+(r.wxn?' · '+esc(r.wxn):'')+'</small>':'')+
    '<div class="rv"><div>'+crest(ev.h,38)+'<span>'+tn(ev.h)+'</span></div><b dir="rtl">'+hg+' – '+ag+'</b><div>'+crest(ev.a,38)+'<span>'+tn(ev.a)+'</span></div></div>';
   if(r.pens!==null)h+='<p class="rp">פנדלים: '+(r.pens?'ניצחון':'הפסד')+'</p>';
   if(r.hl&&r.hl.length){h+='<div class="tl">'+r.hl.map(function(e){
@@ -2825,7 +2885,8 @@ function showSim(list,p0){
   $('mrTitle').textContent=list.length+' משחקים';
   $('mrStats').innerHTML='<div><b style="color:#3ddc84">'+w+'</b><span>נצחונות</span></div><div><b style="color:#f5c542">'+d+'</b><span>תיקו</span></div><div><b style="color:#ff5a5a">'+l+'</b><span>הפסדים</span></div>';
   var h='<div class="rsum"><span>שערים <b dir="ltr">'+gf+':'+ga+'</b></span><span>אמון <b>'+Math.round(m.conf)+'%</b></span>'+(p0&&p1?'<span>מקום <b>'+p0+' ← '+p1+'</b></span>':'')+'</div>';
-  h+=list.map(mcard).join('');
+  if(list.length>8)h+='<p class="desc">מוצגים 8 המשחקים האחרונים מתוך '+list.length+'.</p>';
+  h+=list.slice(-8).map(mcard).join('');
   var nw=[];list.forEach(function(r){});
   if(m.news.length){h+='<p class="sub">חדשות</p>'+m.news.slice(0,3).map(function(x){return '<div class="line"><span>'+esc(x)+'</span></div>';}).join('');}
   var last=list[list.length-1];
@@ -2936,12 +2997,12 @@ function mgAct(a,v){
     if(a==='bkx'){try{save();var c=btoa(unescape(encodeURIComponent(JSON.stringify(D))));tx.value=c;tx.select();try{navigator.clipboard.writeText(c).then(function(){ms.textContent='הקוד הועתק. שמור אותו במקום בטוח.';},function(){ms.textContent='סמן והעתק את הקוד ידנית.';});}catch(e){ms.textContent='סמן והעתק את הקוד ידנית.';}}catch(e){ms.textContent='הייצוא נכשל.';}}
     else{try{var o=JSON.parse(decodeURIComponent(escape(atob(tx.value.trim()))));if(!o||typeof o!=='object'||!o.mgr)throw 0;window.__noSave=1;stWrite(JSON.stringify(o));ms.textContent='הייבוא הצליח. טוען מחדש...';setTimeout(function(){location.reload();},600);}catch(e){ms.textContent='הקוד לא תקין.';}}
     return;}
-  if(a!=='reset'&&a!=='offer')mgArm='';
+  if(a!=='reset'&&a!=='offer'&&a!=='simS')mgArm='';
   mgMsg='';
   var msg=null;
   if(a==='play'){sfx.click();startLive();return;}
   if(a==='sim'){var ev=nextEv();if(ev&&m.phase==='season'){sfx.click();var rr=userMatch(ev,0,false);playSim(rr,function(){showRes(rr);});}return;}
-  if(a==='sim5'){var k=0,e2,lst=[],p0=m.phase==='season'?finalOrder().indexOf(m.team)+1:0;while(k<5&&m.phase==='season'&&(e2=nextEv())){lst.push(userMatch(e2,0,false));k++;}sfx.click();if(lst.length){showSim(lst,p0);return;}}
+  if(a==='simS'){if(mgArm!=='simS'){mgArm='simS';sfx.click();renderMgr();return;}mgArm='';var k=0,e2,lst=[],p0=m.phase==='season'?finalOrder().indexOf(m.team)+1:0;while(k<200&&m.phase==='season'&&(e2=nextEv())){lst.push(userMatch(e2,0,false));k++;}sfx.click();if(lst.length){showSim(lst,p0);return;}}
   else if(a==='fxm'){fxMode=v;}
   else if(a==='euv'){euView=v;}
   else if(a==='fxw'){fxWin=v==='1';}
@@ -2956,7 +3017,7 @@ function mgAct(a,v){
   else if(a==='sell'){var q=m.squad.filter(function(z){return z.id===+v;})[0];
     if(q){var gks=m.squad.filter(function(z){return z.p==='GK';}).length;
       if(m.squad.length<=16||(q.p==='GK'&&gks<=2)){m.news.unshift('אי אפשר למכור: חייבים לפחות 16 שחקנים ושני שוערים.');}
-      else{m.bud+=Math.round(valOf(q.o,q.a)*0.7);m.squad=m.squad.filter(function(z){return z!==q;});if(m.trainee===q.id)m.trainee=0;mgSel=0;m.news.unshift('נמכר: '+q.n);save();}}}
+      else{m.bud+=Math.round(valOf(q.o,q.a)*0.7);hofAdd(q);m.squad=m.squad.filter(function(z){return z!==q;});if(m.trainee===q.id)m.trainee=0;mgSel=0;m.news.unshift('נמכר: '+q.n);save();}}}
   else if(a==='bid'){var pr=(''+v).split(':'),x=m.mk[+pr[0]],pc=+pr[1]/100;
     if(x&&!x.ref){var price=Math.round(x.price*pc);
       var avg=mySq().xi.filter(function(z){return z.id;}).reduce(function(a,z){return a+z.o;},0)/11,gap=x.p.o-avg-prestB(),agent=Math.round(price*0.08),wage=Math.round(wgf(x.p)*(pc<1?1.05:1));
@@ -3010,13 +3071,19 @@ function mgAct(a,v){
   else if(a==='luauto'){m.lu=null;mgSlot=-1;save();}
   else if(a==='tk'){m.tk=(m.tk===+v?0:+v);save();}
   else if(a==='spon'){if(m.sponO&&m.sponO[+v]){m.spon=m.sponO[+v];m.sponO=null;sfx.coin();save();}}
-  else if(a==='renew'){var rp=m.squad.filter(function(z){return z.id===+v;})[0],rc=rp?renewCost(rp):0;if(rp&&m.bud>=rc){m.bud-=rc;rp.c=ri(3,4);mgMsg=rp.n+' חתם על חוזה חדש.';sfx.coin();save();}}
+  else if(a==='renew'){var rv=(''+v).split(':'),rp=m.squad.filter(function(z){return z.id===+rv[0];})[0],rc=rp?Math.round(renewCost(rp)*(rv[1]==='g'?0.6:rv[1]==='t'?0.5:1)):0;if(rp&&m.bud>=rc){m.bud-=rc;rp.c=ri(3,4);rp.bn=rv[1]||0;mgMsg=rp.n+' חתם על חוזה חדש'+(rv[1]==='g'?' עם בונוס €30K על כל שער.':rv[1]==='t'?' עם בונוס €200K אם תזכו באליפות או בגביע.':'.');sfx.coin();save();}}
+  else if(a==='ddy'){var dd=m.dd;if(dd){if(dd.t==='o'){var dp=pl(dd.pid),gk2=m.squad.filter(function(z){return z.p==='GK';}).length;if(!dp)m.dd=null;else if(m.squad.length<=16||(dp.p==='GK'&&gk2<=2))mgMsg='אי אפשר למכור: חייבים לפחות 16 שחקנים ושני שוערים.';else{m.bud+=dd.pr;hofAdd(dp);m.squad=m.squad.filter(function(z){return z!==dp;});if(m.trainee===dp.id)m.trainee=0;m.news.unshift('נמכר ב-'+fmt(dd.pr)+': '+dp.n);mgMsg=dp.n+' נמכר ל'+TT(dd.cl)[0]+' ב-'+fmt(dd.pr)+'.';m.dd=null;sfx.coin();save();}}else if(m.bud>=dd.pr&&m.squad.length<30){m.bud-=dd.pr;ensureSp(dd.pl);m.squad.push(dd.pl);mgMsg=dd.pl.n+' חתם ('+dd.pl.o+').';m.dd=null;sfx.coin();save();}}}
+  else if(a==='ddn'){m.dd=null;save();}
   else if(a==='iv'){ivAnswer(+v);}
   else if(a==='press'){var pr2=m.press;if(pr2){var k2=+v;
     if(k2===0){m.conf=clamp(m.conf+1,0,100);mgMsg='תשובה מקצועית. ההנהלה מרוצה.';}
     else if(k2===1){if(mr()<0.6){m.squad.forEach(function(p){p.f=clamp(p.f+1,-2,2);});mgMsg='הביטחון שלך מדבק: הקבוצה במצב רוח מצוין.';}else{m.conf=clamp(m.conf-3,0,100);mgMsg='ההצהרה הרהבתנית עצבנה את ההנהלה.';}}
     else{if(pr2.res==='L'){m.squad.forEach(function(p){p.f=clamp(p.f+1,-2,2);});m.conf=clamp(m.conf+1,0,100);}mgMsg='נתת גב לשחקנים, והם יזכרו את זה.';}
     m.press=null;save();}}
+  else if(a==='acp'){var ap=(m.ac||[]).filter(function(z){return z.id===+v;})[0];if(ap){if(m.squad.length>=30)mgMsg='הסגל מלא (30).';else{m.ac.splice(m.ac.indexOf(ap),1);ap.c=3;ensureSp(ap);m.squad.push(ap);mgMsg=ap.n+' קודם לסגל הבוגרים.';sfx.coin();save();}}}
+  else if(a==='acx'){var ax=(m.ac||[]).filter(function(z){return z.id===+v;})[0];if(ax){m.ac.splice(m.ac.indexOf(ax),1);mgMsg=ax.n+' שוחרר.';save();}}
+  else if(a==='mt'){var yp=m.squad.filter(function(z){return z.id===+v;})[0];if(yp){var vet=m.squad.filter(function(z){return z.a>=29&&z.p===yp.p&&z.id!==yp.id;}).sort(function(a,b){return b.o-a.o;})[0];if(vet){m.mt={t:yp.id,m:vet.id};mgMsg=vet.n+' ילמד את '+yp.n+'.';save();}else mgMsg='אין שחקן ותיק (29+) בעמדה '+plab(yp)+' בסגל.';}}
+  else if(a==='mtx'){m.mt=null;save();}
   else if(a==='cap'){m.cap=+v;var cq=m.squad.filter(function(z){return z.id===+v;})[0];mgMsg=cq?cq.n+' מונה לקפטן.':'';save();}
   else if(a==='fac'){ensureFac();var lv=m.fac[v],cost=FAC[v][2]*(lv+1);if(lv<5&&m.bud>=cost){m.bud-=cost;m.fac[v]++;sfx.coin();save();}}
   else if(a==='reset'){if(mgArm!=='reset'){mgArm='reset';}else{mgArm='';D.mgr=null;save();go('mgrNew');return;}}
@@ -3064,27 +3131,28 @@ var LIVE=null,lvTimer=null;
 function oppXI(id){var m=D.mgr;return m.sq&&m.sq[id]?sqR(m.sq[id]).xi.filter(function(x){return !x.x&&x.id;}):null;}
 function fakeXI(fr){var xi=[];['GK','DF','DF','DF','DF','MF','MF','MF','FW','FW','FW'].forEach(function(p,i){xi.push({id:i+1,n:fr?pickA(FFN)+' '+pickA(FLN):pname(mr),p:p,o:60});});return xi;}
 function shooter(xi){var w=xi.map(function(p){return p.p==='FW'?4:p.p==='MF'?2.2:p.p==='DF'?0.7:0.02;}),t=w.reduce(function(a,b){return a+b;},0),r=mr()*t,i;for(i=0;i<xi.length;i++){r-=w[i];if(r<=0)return xi[i];}return xi[xi.length-1];}
+var REFS=[['אורן כהנא',0.6],['דניאל לוי',0.7],['איתי מזרחי',0.8],['רועי פרידמן',1],['גיל אברמוב',1],['עומר שטרן',1],['ליאור בן דוד',1.2],['אלון ביטון',1.4],['יובל רוזן',1.5],['ניר סבג',1.6]];
 var WX=[['בהיר',1],['בהיר',1],['בהיר',1],['גשם',0.9],['חם מאוד',0.94],['רוח חזקה',0.92],['ערפל',0.97]];
 function planMatch(ev,played){
   var m=D.mgr,sq=mySq(),me=sq.r,op=teamR(ev.opp),k=tacK(),derby=TT(m.team)[3]===TT(ev.opp)[3],eur=(ev.opp>=100&&ev.opp<200),dv=eur?17:20;
   if(eur)me=me.map(function(x){return x-LGO.Israel;});
   var gp=ovrT(me)-ovrT(op),dm=1,dq=1;if(gp>4){dm=Math.max(0.62,1/(1+0.04*(gp-4)));dq=Math.min(1.35,1+0.035*(gp-4));}
-  var wx=WX[ri(0,WX.length-1)],og=pois(expG(me,op,ev.home,k[0],dv)*dm*(played?0.68:1)*wx[1]*leadK(sq)*luck()),tg=pois(expG(op,me,!ev.home,k[1],dv)*dq*(played?1.12:1)*wx[1]*luck());
-  var oxi=oppXI(ev.opp)||fakeXI(ev.opp>=100&&ev.opp<200),myXI=sq.xi.filter(function(x){return !x.x&&x.id;}),sc=[],E=[],i,p,q;
+  var rf=REFS[ri(0,REFS.length-1)],wx=WX[ri(0,WX.length-1)],og=pois(expG(me,op,ev.home,k[0],dv)*dm*(played?0.68:1)*wx[1]*leadK(sq)*luck()),tg=pois(expG(op,me,!ev.home,k[1],dv)*dq*(played?1.12:1)*wx[1]*luck());
+  var oxi=oppXI(ev.opp)||fakeXI((ev.opp>=100&&ev.opp<200)||ev.opp>=300),myXI=sq.xi.filter(function(x){return !x.x&&x.id;}),sc=[],E=[],i,p,q;
   var ogk=(oxi.filter(function(x){return x.p==='GK';})[0]||{n:'השוער'}).n,mgk=(myXI.filter(function(x){return x.p==='GK';})[0]||{n:'השוער'}).n;
   for(i=0;i<og;i++){p=pickScorer(sq.xi);if(p){sc.push(p.id);q=myXI[ri(0,myXI.length-1)];E.push({m:ri(2,89),t:'goal',me:1,id:p.id,who:p.n,as:(q&&q.id!==p.id&&q.p!=='GK')?q.n:''});}}
   for(i=0;i<tg;i++){p=shooter(oxi);q=oxi[ri(0,oxi.length-1)];E.push({m:ri(2,89),t:'goal',me:0,who:p.n,as:(q&&q!==p&&q.p!=='GK')?q.n:''});}
   var T=['save','save','miss','post','danger','block'],n1=ri(3,6),n2=ri(3,6);
   for(i=0;i<n1;i++)E.push({m:ri(1,89),t:pickA(T),me:1,who:shooter(myXI).n,gk:ogk});
   for(i=0;i<n2;i++)E.push({m:ri(1,89),t:pickA(T),me:0,who:shooter(oxi).n,gk:mgk});
-  for(i=ri(0,3);i>0;i--){var side=mr()<0.5,xx=side?myXI:oxi,cp=xx[ri(1,xx.length-1)];E.push({m:ri(5,89),t:'card',me:side?1:0,who:cp.n,id:cp.id,red:mr()<0.1?1:0});}
+  for(i=Math.round(ri(0,3)*rf[1]+(rf[1]>1.3?ri(0,1):0));i>0;i--){var side=mr()<0.5,xx=side?myXI:oxi,cp=xx[ri(1,xx.length-1)];E.push({m:ri(5,89),t:'card',me:side?1:0,who:cp.n,id:cp.id,red:mr()<0.1*rf[1]?1:0});}
   myXI.forEach(function(z){var q=pl(z.id);if(q&&trOf(q)==='hot'&&mr()<0.45)E.push({m:ri(5,89),t:'card',me:1,who:q.n,id:q.id,red:mr()<0.15?1:0});});
   var nfk=3+(derby?1:0)+((ev.t==='C'&&ev.r===3)?1:0),tk=taker();
   if(played)for(i=0;i<nfk;i++)E.push({m:ri(6+i*2,86),t:'fk',me:1,who:tk?tk.n:'הבועט'});
   E.push({m:45,t:'half'});
   E.sort(function(a,b){return a.m-b.m;});
   var fi=0;E.forEach(function(e){if(e.t==='fk')e.idx=fi++;});
-  return {wx:wx[0],wk:wx[1],og:og,tg:tg,sc:sc,E:E,nfk:nfk,derby:derby,fkSc:[],ogk:ogk};
+  return {rf:rf,wx:wx[0],wk:wx[1],og:og,tg:tg,sc:sc,E:E,nfk:nfk,derby:derby,fkSc:[],ogk:ogk};
 }
 function lvCols(){
   var m=D.mgr,mc=tcol(m.team)[0],oc=tcol(LIVE.ev.opp)[0];
@@ -3098,7 +3166,7 @@ function startLive(){
   LIVE={add:addT(),addSh:false,ev:ev,plan:plan,i:0,min:0,sc:[0,0],sp:1,wait:0,anim:null,fk:null,done:false,t:0,fkn:0,fkG:0,feed:[],txt:'המשחק מתחיל!'};
   LIVE.cols=lvCols();LIVE.fc=mySq().fc;
   $('lvAn').textContent=TT(m.team)[0];$('lvBn').textContent=TT(ev.opp)[0];
-  $('lvEv').textContent=evLabel(ev)+(plan.derby?' · דרבי!':'')+' · '+(ev.home?'בית':'חוץ')+' · '+plan.wx;
+  $('lvEv').textContent=evLabel(ev)+(plan.derby?' · דרבי!':'')+' · '+(ev.home?'בית':'חוץ')+' · '+plan.wx+' · שופט: '+plan.rf[0]+(plan.rf[1]>=1.4?' (קשוח)':plan.rf[1]<=0.7?' (מקל)':'');
   $('lvFeed').innerHTML='';$('lvFk').hidden=true;$('lvHt').hidden=true;$('lvVar').hidden=true;$('lvDone').hidden=true;
   lvHdr();go('mgrLive');
   clearInterval(lvTimer);lvTimer=setInterval(lvTick,40);
@@ -3220,6 +3288,7 @@ var EUN={CL:'ליגת האלופות',EL:'הליגה האירופית',ECL:'קו
 var EUC={CL:['ריאל מדריד','ברצלונה','מנצ׳סטר סיטי','באיירן מינכן','פריז סן ז׳רמן','ליברפול','אינטר','ארסנל','אתלטיקו מדריד','בורוסיה דורטמונד','נאפולי','בנפיקה','ספורטינג ליסבון','צ׳לסי','יובנטוס','לברקוזן','אטאלנטה','מילאן','אס מונאקו','לייפציג','פורטו','סלטיק','קלאב ברוז׳','גלאטסראיי','פ.ס.וו איינדהובן','אאק אתונה','רד בול זלצבורג','דינמו זאגרב','יאנג בויז','שטוטגרט','אסטון וילה','ספארטה פראג','שחטאר דונייצק'],
   EL:['ווסטהאם','אס רומא','סביליה','פיינורד','לאציו','ריאל סוסיאדד','אולימפיק ליון','אתלטיק בילבאו','איינטרכט פרנקפורט','בראגה','ברייטון','טוטנהאם','ויאריאל','בולוניה','פרייבורג','ניס','גנט','פנתינאיקוס','דינמו קייב','כוכב אדום בלגרד','פרנצווארוש','ויקטוריה פלזן','רפיד וינה','לודוגורץ','בשיקטאש','אלקמאר','אנג׳רס','סטנדרד ליאז׳','ריאל בטיס','פנרבחצ׳ה','אנדרלכט'],
   ECL:['אייאקס','אולימפיאקוס','פיורנטינה','סלביה פראג','ליל','פאוק סלוניקי','ריינג׳רס','באניק אוסטרבה','סטורם גראץ','יאגלוניה בלוסטוק','סלובן ברטיסלבה','האקן','בודו גלימט','אפואל ניקוסיה','רפיד בוקרשט','לגיה ורשה','לך פוזנן','פרטיזן בלגרד','זאגלה לובין','קופנהגן','מאלמה','האמרבי','ויקינגור','ז׳ילינה','קלוז׳','סרטה בוקרשט','ססקה סופיה','גנק','הרטה ברלין','ברנלי','נורדשלאן']};
+var EUX=['כוכב האדום בלגרד', 'פרטיזן בלגרד', 'האיידוק ספליט', 'ריייקה', 'דינמו זאגרב', 'שחטאר דונייצק', 'דינמו קייב', 'פנרבחצ׳ה', 'בשיקטאש', 'טרבזונספור', 'איסטנבול באשקשיר', 'אאק לרנקה', 'אומוניה ניקוסיה', 'אפולון לימסול', 'פאנאתינייקוס', 'אאק אתונה', 'אריס סלוניקי', 'באזל', 'לוגאנו', 'לוצרן', 'סן גאלן', 'אנדרלכט', 'יוניון סן ז׳יליואז', 'קלאב ברוז׳', 'גנט', 'אנטוורפן', 'סטנדרד ליאז׳', 'פ.ס.וו איינדהובן', 'פיינורד', 'אלקמאר', 'טוונטה', 'אברדין', 'האטס', 'קילמרנוק', 'שמרוק רוברס', 'דרי סיטי', 'לארן', 'לינפילד', 'ניו סיינטס', 'ברונדבי', 'מידטילנד', 'אורהוס', 'אלפסבורג', 'האקן', 'ג׳ורגורדן', 'מאלמה', 'בודו גלימט', 'מולדה', 'בראן', 'רוזנבורג', 'הלסינקי', 'קופס קופיו', 'ולור', 'ברייבליק', 'ויקינגור', 'פרנצווארוש', 'פהרוואר', 'סלובן ברטיסלבה', 'סלביה פראג', 'ספארטה פראג', 'ויקטוריה פלזן', 'סיגמה אולומוץ', 'באניק אוסטרבה', 'לגיה ורשה', 'לך פוזנן', 'ראקוב צ׳נסטוחובה', 'יאגלוניה בלוסטוק', 'פיאסט גליוויצה', 'לודוגורץ', 'צסק״א סופיה', 'לבסקי סופיה', 'פ.צ.ס.ב.', 'אוניברסיטטיאה קראיובה', 'סרטה בוקרשט', 'צ.פ.ר. קלוז׳', 'רפיד בוקרשט', 'צוקריצ׳קי', 'וויווודינה', 'רדניצקי', 'זרינסקי מוסטאר', 'סרייבו', 'שקנדיה', 'שריף טירספול', 'פיוניק ירוואן', 'נוח ירוואן', 'קראבאח', 'נפטצ׳י באקו', 'קאיראט אלמטי', 'אסטנה', 'אורדבאסי', 'דינמו מינסק', 'בטה בוריסוב', 'ז׳לגיריס', 'ריגה', 'פלורה טאלין', 'דינמו בטומי', 'דילה גורי', 'הייבס', 'המרון ספרטנס', 'מריבור', 'אולימפיה לובליאנה', 'דינמו בוקרשט', 'ליאפאיה', 'סלובן ליברץ', 'ספרטק טרנאבה'];
 var NEXTC={CL:'EL',EL:'ECL',ECL:null};
 var EUQ=['שריף טירספול','אסטנה','קראבאח','ז׳לגיריס','דינמו מינסק','ריגה','בוהמיאנס 1905','סילקבורג','פיוניק ירוואן','שקנדיה','מידטילנד','ספרטק טרנאבה','דינמו בטומי','סרבט ז׳נבה','הייבס','קרוסיידרס','לינקולן רד אימפס','סנט פטריק אתלטיק','דרי סיטי','פיאסט גליוויצה','זרינסקי מוסטאר','טורפדו קוטאיסי','ליאפאיה','דינמו בוקרשט','ויטוריה גימראש','ארמיניה בילפלד','פלורה טאלין','הנבירס'];
 var EUB={CL:[85,93],EL:[80,88],ECL:[76,85]};
@@ -3235,7 +3304,7 @@ function euInit(c){
   euQ(en);
 }
 function euQ(n){
-  var e=D.mgr.eu,c=e.c,lst=n>=4?EUC[c]:(n===3?EUC[c].slice(-14).concat(EUQ):EUQ);
+  var e=D.mgr.eu,c=e.c,lst=n>=4?EUC[c].concat(EUX.slice(0,30)):(n===3?EUC[c].slice(-14).concat(EUQ,EUX.slice(30,60)):EUQ.concat(EUX.slice(60)));
   var nm=euPick(lst),idx=euTeam(nm,euRate(c,-13+n*2.5)),h=mr()<0.5,k=(n-1)*2,lb='מוקדמות · סבב '+n+' מתוך 4';
   e.pend[k]={opp:idx,home:h,leg:1,ph:'q',lb:lb+' · משחק ראשון'};
   e.pend[k+1]={opp:idx,home:!h,leg:2,ph:'q',lb:lb+' · משחק חוזר'};
@@ -3243,7 +3312,7 @@ function euQ(n){
 }
 function euToLP(){
   var m=D.mgr,e=m.eu,c=e.c,N=c==='ECL'?6:8,i,nm=[],rg=[];
-  shuf(EUC[c]).concat(shuf(NEXTC[c]?EUC[NEXTC[c]]:EUQ)).concat(shuf(EUQ)).forEach(function(x){if(!e.used[x]&&nm.indexOf(x)<0)nm.push(x);});
+  shuf(EUC[c]).slice(0,20).concat(shuf(EUX.concat(NEXTC[c]?EUC[NEXTC[c]]:[],EUC[c].slice(20)))).concat(shuf(EUQ)).forEach(function(x){if(!e.used[x]&&nm.indexOf(x)<0)nm.push(x);});
   e.lpT=[-1];
   for(i=0;i<35;i++){e.used[nm[i]]=1;e.lpT.push(euTeam(nm[i],euRate(c,i<22?0:-4)));}
   e.tb=[];for(i=0;i<36;i++){e.tb.push([0,0,0,0,0,0,0]);rg.push(i);}
